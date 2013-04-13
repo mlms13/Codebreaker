@@ -128,7 +128,7 @@ function SetMinimumWidth()
         minimumWidth += 4;
     }
     $('h1').css('minWidth', minimumWidth + 'px');
-    $('#mastermind_game').css('minWidth', minimumWidth + 'px');
+    $('#codebreaker_game').css('minWidth', minimumWidth + 'px');
     $('.dialog').css('minWidth', dialogMinimumWidth + 'px');
 }
 function BuildColorPicker()

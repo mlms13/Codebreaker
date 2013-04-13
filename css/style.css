@@ -1,5 +1,5 @@
 /***************************************
- * Main styles for the MasterMind game *
+ * Main styles for the Codebreaker game *
  ***************************************/
 
 body {
@@ -112,7 +112,7 @@ h1 {
 /**************************
  * Main game board styles *
  **************************/
-#mastermind_game {
+#codebreaker_game {
     background: #fff;
     border: 3px solid #370;
     box-shadow: inset 1px 3px 12px #555;
@@ -534,7 +534,7 @@ h1 {
         padding-top: 12px;
         width: auto;
     }
-    #mastermind_game {
+    #codebreaker_game {
         width: auto;
     }
     #menu {
