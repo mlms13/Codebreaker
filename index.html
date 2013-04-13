@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<!--[if lt IE 7 ]><html class="ie6" lang="en"> <![endif]-->
+<!--[if IE 7 ]><html class="ie7" lang="en"> <![endif]-->
+<!--[if IE 8 ]><html class="ie8" lang="en"> <![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!--> <html lang="en"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8" />
+        <title>Mastermind</title>
+        <meta name="viewport" content="width=device-width" />
+        <link rel="stylesheet" type="text/css" href="stylesheets/style.css" />
+        <link href='http://fonts.googleapis.com/css?family=Fontdiner+Swanky' rel='stylesheet' type='text/css'>
+        <script type="text/javascript" src="scripts/jquery-1.5.1.min.js"></script>
+        <script type="text/javascript" src="scripts/jquery-ui-1.8.9.custom.min.js"></script>
+        <script type="text/javascript" src="scripts/mastermindGame.js"></script>
+    </head>
+    <body>
+        <noscript>
+            <div class="compatWarning">
+                It looks like you have JavaScript disabled in your web browser. Because this game is built with JavaScript, it won't be functional unless you enable JavaScript for this site.
+            </div>
+        </noscript>
+        <div class="compatWarning" id="ie8Warning">
+            It looks like you're using Internet Explorer 8. While the game should be playable, your browser isn't supported, and you'll probably have a much better experience if you use <a href="http://www.mozilla.com/en-US/firefox/">Firefox 3.6+</a> or <a href="http://www.google.com/chrome">Google Chrome</a> instead.
+        </div>
+        <div class="compatWarning" id="ieOldWarning">
+            It looks like you're using an old version of Internet Explorer. This game highlights new web technologies, so most things probably won't work correctly in your browser, and there aren't any plans to add support in the future.  To play the game, it is recommended that you use <a href="http://www.mozilla.com/en-US/firefox/">Firefox 3.6+</a> or <a href="http://www.google.com/chrome">Google Chrome</a>.
+        </div>
+        <h1>Mastermind</h1>
+        <div id="mastermind_game">
+            <div id="menu">
+                <div class="menuItem" id="pref_button_container" title="Preferences">
+                    <div id="preferences_button">*</div>
+                </div>
+                <div class="menuItem" id="pauseButton" title="Pause">
+                    <div class="first"></div>
+                    <div></div>
+                </div>
+                <div class="menuItem" id="shareButton" title="Share this Game">
+                    &#8680;
+                </div>
+            </div>
+            <div id="game_board"></div>
+            <div id="color_chooser"></div>
+            <div id="overlay">
+                <div class="dialog" id="preferences">
+                    <h2>Preferences</h2>
+                    <span class="label">Colors:</span>
+                    <ul id="opt_colors">
+                        <li>4</li>
+                        <li>5</li>
+                        <li>6</li>
+                        <li>7</li>
+                        <li>8</li>
+                    </ul>
+                    <span class="label">Holes:</span>
+                    <ul id="opt_length">
+                        <li>3</li>
+                        <li>4</li>
+                        <li>5</li>
+                        <li>6</li>
+                    </ul>
+                    <span class="label">Guesses:</span>
+                    <ul id="opt_guesses">
+                        <li>8</li>
+                        <li>10</li>
+                        <li>12</li>
+                    </ul>
+                    <span class="label" id="repeated_colors">Allow Repeated Colors:</span>
+                    <div class="checkbox">
+                        <div class="checkboxBorder">
+                            <span id="checkmark">&#10003;</span>
+                        </div>
+                    </div>
+                    <span class="button left">Cancel</span>
+                    <span class="button right">Save</span>
+                </div>
+                <div class="dialog" id="win_message">
+                    <h2>You Win!</h2>
+                    <span>It took you:</span>
+                    <span class="stats" id="rounds_to_win"></span>
+                    <span class="stats" id="time_to_win"></span>
+                    <span id="show_more_stats">See More Statistics and Averages</span>
+                    <div id="more_stats">
+                        <h2 id="statisticsHeader">Statistics</h2>
+                        <span id="statsSetup"></span>
+                        <span id="statsRecord"></span>
+                        <span class="stats" id="avg_rounds_to_win"></span>
+                        <span class="stats" id="avg_time_to_win"></span>
+                    </div>
+                    <span class="button left">I'm Done</span>
+                    <span class="button right">Play Again</span>
+                </div>
+                <div class="dialog" id="lose_message">
+                    <h2>You Lose!</h2>
+                    <span>The correct answer was:</span>
+                    <div class="row" id="solution"></div>
+                    <span class="button left">I'm Done</span>
+                    <span class="button right">Play Again</span>
+                </div>
+                <div class="dialog" id="paused">
+                    <h2>Your Game is Paused</h2>
+                    <span class="button">Resume</span>
+                </div>
+                <div class="dialog" id="error">
+                    <h2>Error!</h2>
+                    <p id="errorMessage"></p>
+                    <p id="startNewGame">Maybe you'd like to try a different game instead?</p>
+                    <span class="button">Okay</span>
+                    <span class="button left">No Thanks</span>
+                    <span class="button right">Sure</span>
+                </div>
+                <div class="dialog" id="shareGame">
+                    <h2>Share this Game</h2>
+                    <label for="gameUrl">Link to your current game:</label><br />
+                    <input readonly="readonly" type="text" id="gameUrl" name="gameUrl" />
+                    <span class="button">Continue</span>
+                </div>
+            </div>
+        </div>
+        <p id="copyright">&copy; 2011 mlms, <a href="http://creativecommons.org/licenses/by-sa/3.0/">some rights reserved</a></p>
+    </body>
+</html>
