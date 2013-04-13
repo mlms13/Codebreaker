@@ -4,23 +4,16 @@
 
 body {
     background: #222;
-    font-family: Verdana, Arial, sans-serif;
-    font-size: 13px;
-    margin: 0;
+    font: 13px sans-serif;
+    margin: 30px 0 0;
 }
 h1 {
-    background-color: #370;
-    background-image: -moz-linear-gradient(center top, #6a2, #370);
-    background-image: -webkit-gradient(linear, left top, left bottom, from(#6a2), to(#370));
-    border-radius: 16px 16px 0px 0px;
-        -khtml-border-radius: 16px 16px 0px 0px;
-        -moz-border-radius: 16px 16px 0px 0px;
-        -webkit-border-radius: 16px 16px 0px 0px;
-    color:#e6ffdb;
-    font-family: 'Fontdiner Swanky', sans-serif;
-    font-size: 38px;
-    line-height: 24px;
-    margin: 30px auto 0;
+    background: #370;
+    background-image: linear-gradient(#6a2, #370);
+    border-radius: 16px 16px 0 0;
+    color: #e6ffdb;
+    font: 38px/24px 'Fontdiner Swanky', sans-serif;
+    margin: 0 auto;
     padding: 4px 19px 6px;
     text-align: center;
     text-shadow: -2px -2px 1px #360;
@@ -54,9 +47,6 @@ h1 {
     background: #f6f6f6;
     border: 1px solid #aaa;
     border-radius: 8px 0 0 8px;
-        -khtml-border-radius: 8px 0 0 8px;
-        -moz-border-radius: 8px 0 0 8px;
-        -webkit-border-radius: 8px 0 0 8px;
     padding: 2px;
     position: absolute;
     right: 0;
@@ -88,8 +78,6 @@ h1 {
 #menu #pauseButton div {
     background: #aaa;
     box-shadow: 1px 1px 1px #444;
-        -moz-box-shadow: 1px 1px 1px #444;
-        -webkit-box-shadow: 1px 1px 1px #444;
     float: left;
     margin: 2px;
     height: 14px;
@@ -116,8 +104,6 @@ h1 {
     background: #fff;
     border: 3px solid #370;
     box-shadow: inset 1px 3px 12px #555;
-        -moz-box-shadow: inset 1px 3px 12px #555;
-        -webkit-box-shadow: inset 1px 3px 8px #555;
     margin: 0 auto;
     min-height: 380px;
     overflow: hidden;
@@ -128,9 +114,10 @@ h1 {
 
 #game_board {
     overflow: hidden;
+    -ms-user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
     user-select: none;
-        -moz-user-select: none;
-        -webkit-user-select: none;
 }
 .row {
     clear: both;
@@ -145,11 +132,7 @@ h1 {
 .holder {
     background: #e4e4e4;
     border-radius: 17px;
-        -khtml-border-radius: 17px;
-        -moz-border-radius: 17px;
-        -webkit-border-radius: 17px;
     box-shadow: inset 1px 1px 2px #aaa;
-        -moz-box-shadow: inset 1px 1px 2px #aaa;
     display: inline-block;
     height: 34px;
     margin: 3px 8px;
@@ -158,13 +141,11 @@ h1 {
 .active .holder {
     background: #bbb;
     box-shadow: inset 1px 1px 2px #666;
-        -moz-box-shadow: inset 1px 1px 2px #666;
     cursor: pointer;
 }
 .active .holder.drop_hover {
     background: #ccc;
     box-shadow: inset 1px 1px 3px #888;
-        -moz-box-shadow: inset 1px 1px 3px #888;
 }
 .holder.selected {
     border: 1px solid #888;
@@ -177,12 +158,7 @@ h1 {
 }
 .holder .marble {
     border-radius: 17px;
-        -khtml-border-radius: 17px;
-        -moz-border-radius: 17px;
-        -webkit-border-radius: 17px;
     box-shadow: 1px 1px 2px #666;
-        -moz-box-shadow: 1px 1px 2px #666;
-        -webkit-box-shadow: 1px 1px 2px #666;
     height: 34px;
     width: 34px;
 }
@@ -247,7 +223,7 @@ h1 {
     text-align: center;
     width: 44px;
 }
-.active .display_correct{
+.active .display_correct {
     background: #ccc;
 }
 .display_correct.contains5 {
@@ -261,12 +237,7 @@ h1 {
 .display_correct .correct_marker {
     background: #ddd;
     border-radius: 4px;
-        -khtml-border-radius: 4px;
-        -moz-border-radius: 4px;
-        -webkit-border-radius: 4px;
     box-shadow: -1px -1px 1px #888;
-        -moz-box-shadow: -1px -1px 1px #888;
-        -webkit-box-shadow: -1px -1px 1px #888;
     display: inline-block;
     height: 8px;
     margin: 6px 7px;
@@ -287,14 +258,10 @@ h1 {
 .display_correct .correct_marker.black {
     background: #111;
     box-shadow: 1px 1px 2px #666;
-        -moz-box-shadow: 1px 1px 2px #666;
-        -webkit-box-shadow: 1px 1px 2px #666;
 }
 .display_correct .correct_marker.white {
     background: #fff;
     box-shadow: 1px 1px 2px #666;
-        -moz-box-shadow: 1px 1px 2px #666;
-        -webkit-box-shadow: 1px 1px 2px #666;
 }
 .paused .display_correct .correct_marker {
     background: #bbb;
@@ -305,11 +272,8 @@ h1 {
 
 #color_chooser {
     background: #666;
-    background-image: -moz-linear-gradient(center top, #666, #888);
-    background-image: -webkit-gradient(linear, left top, left bottom, from(#666), to(#888));
+    background-image: linear-gradient(#666, #888);
     box-shadow: 0px 0px 12px #111;
-        -moz-box-shadow: 0px 0px 12px #111;
-        -webkit-box-shadow: 0px 0px 12px #111;
     bottom: 0px;
     height: 34px;
     left: 0px;
@@ -325,8 +289,6 @@ h1 {
 }
 #color_chooser .holder .marble {
     box-shadow: 1px 1px 2px #444;
-        -moz-box-shadow: 1px 1px 2px #444;
-        -webkit-box-shadow: 1px 1px 2px #444;
     cursor: pointer;
     position: relative;
 }
@@ -335,7 +297,7 @@ h1 {
  **************************************/
 
 #overlay {
-    background-color: rgb(20%, 20%, 20%);
+    background-color: #333;
     background-color: rgba(0, 0, 0, 0.8);
     bottom: 0;
     display: none;
@@ -348,12 +310,7 @@ h1 {
     background: #fff;
     border: 2px solid #ccc;
     border-radius: 8px;
-        -khtml-border-radius: 8px;
-        -moz-border-radius: 8px;
-        -webkit-border-radius: 8px;
     box-shadow: 2px 2px 8px #111;
-        -moz-box-shadow: 2px 2px 8px #111;
-        -webkit-box-shadow: 2px 2px 8px #111;
     color: #666;
     display: none;
     font-family: Verdana, Arial, sans-serif;
@@ -390,15 +347,9 @@ h1 {
 }
 #overlay .dialog .button {
     background: #590;
-    background-image: -moz-linear-gradient(center top, #7b0, #590);
-    background-image: -webkit-gradient(linear, left top, left bottom, from(#7b0), to(#590));
+    background-image: linear-gradient(#7b0, #590);
     border-radius: 4px;
-        -khtml-border-radius: 4px;
-        -moz-border-radius: 4px;
-        -webkit-border-radius: 4px;
     box-shadow: 1px 1px 4px #444;
-        -moz-box-shadow: 1px 1px 4px #444;
-        -webkit-box-shadow: 1px 1px 4px #444;
     color: #fff;
     cursor: pointer;
     display: table;
@@ -409,8 +360,7 @@ h1 {
 }
 #overlay .dialog .button:hover {
     background: #6a0;
-    background-image: -moz-linear-gradient(center top, #8d1, #6a0);
-    background-image: -webkit-gradient(linear, left top, left bottom, from(#8d1), to(#6a0));
+    background-image: linear-gradient(#891, #6a0);
     text-shadow: -1px -1px 1px #590;
 }
 #overlay .dialog .button.left {
@@ -462,8 +412,6 @@ h1 {
 #overlay .dialog .checkboxBorder {
     border: 2px solid #da0;
     box-shadow: inset 1px 1px 2px #aaa;
-        -moz-box-shadow: inset 1px 1px 2px #aaa;
-        -webkit-box-shadow: inset 1px 1px 2px #aaa;
     height: 14px;
     line-height: 14px;
     width: 14px;
@@ -505,8 +453,6 @@ h1 {
 #overlay #gameUrl {
     border: 1px solid #aaa;
     box-shadow: inset 1px 1px 4px #ccc;
-        -moz-box-shadow: inset 1px 1px 4px #ccc;
-        -webkit-box-shadow: inset 1px 1px 4px #ccc;
     padding: 4px 2px;
     width: 100%;
 }
