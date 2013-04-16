@@ -1,0 +1,164 @@
+/**************************************
+ * Styles for the overlay and dialogs *
+ **************************************/
+
+#overlay {
+    background-color: #333;
+    background-color: rgba(0, 0, 0, 0.8);
+    bottom: 0;
+    display: none;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+#overlay .dialog {
+    background: #fff;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 2px 2px 8px #111;
+    color: #666;
+    display: none;
+    font-family: Verdana, Arial, sans-serif;
+    font-size: 14px;
+    margin: 30px auto;
+    overflow: hidden;
+    padding: 16px;
+    position: relative;
+    text-shadow: 1px 0px 1px #999;
+    width: 268px;
+}
+#overlay .dialog h2 {
+    background: transparent;
+    color: #69b;
+    font-family: 'Fontdiner Swanky', sans-serif;
+    font-size: 26px;
+    line-height: 24px;
+    margin: 2px 0 16px;
+    text-align: center;
+    text-shadow: 1px 1px 1px #345;
+}
+#overlay .dialog#preferences .label {
+    clear: left;
+    color: #999;
+    font-family: 'Fontdiner Swanky', sans-serif;
+    font-size: 20px;
+    float: left;
+    padding-bottom: 8px;
+    text-shadow: 1px 1px 1px #333;
+}
+#overlay .dialog#preferences .label#repeated_colors {
+    font-family: Verdana, Arial, sans-serif;
+    font-size: 16px;
+}
+#overlay .dialog .button {
+    background: #590;
+    background-image: linear-gradient(#7b0, #590);
+    border-radius: 4px;
+    box-shadow: 1px 1px 4px #444;
+    color: #fff;
+    cursor: pointer;
+    display: table;
+    font-weight: 600;
+    margin: 12px auto 6px;
+    padding: 4px 10px;
+    text-shadow: -1px -1px 1px #370;
+}
+#overlay .dialog .button:hover {
+    background: #6a0;
+    background-image: linear-gradient(#891, #6a0);
+    text-shadow: -1px -1px 1px #590;
+}
+#overlay .dialog .button.left {
+    clear: left;
+    display: block;
+    float: left;
+}
+#overlay .dialog .button.right {
+    clear: none;
+    display: block;
+    float: right;
+}
+#overlay .dialog ul {
+    float: right;
+    line-height: 24px;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+#overlay .dialog ul li, #overlay .fancy {
+    color: #da0;
+    font-family: 'Fontdiner Swanky', sans-serif;
+    font-size: 20px;
+    font-weight: normal;
+    text-shadow: 1px 1px 1px #a70;
+}
+#overlay .dialog ul li {
+    cursor: pointer;
+    float: left;
+    font-size: 24px;
+    margin: 0 3px;
+    padding: 2px;
+}
+#overlay .dialog ul li:hover {
+    color: #fc6;
+}
+#overlay .dialog ul li.current {
+    color: #c50;
+    cursor: default;
+}
+#overlay .dialog .checkbox {
+    color: #c50;
+    cursor: pointer;
+    float: right;
+    font-size: 28px;
+    overflow: hidden;
+    padding: 1px 6px 2px 0;
+}
+#overlay .dialog .checkboxBorder {
+    border: 2px solid #da0;
+    box-shadow: inset 1px 1px 2px #aaa;
+    height: 14px;
+    line-height: 14px;
+    width: 14px;
+}
+#overlay #win_message .stats {
+    color: #777;
+    display: block;
+    font-weight: 600;
+    margin-left: 24px;
+    text-shadow: none;
+}
+#overlay #win_message #show_more_stats {
+    color: #39c;
+    cursor: pointer;
+    display: block;
+    font-size: 13px;
+    text-shadow: none;
+}
+#overlay #win_message #show_more_stats:hover {
+    color: #6cf;
+    text-decoration: underline;
+}
+#overlay #win_message #statisticsHeader {
+    margin: 16px 0 2px;
+}
+#overlay #win_message #statsSetup {
+    display: table;
+    font-size: 10px;
+    font-style: italic;
+    margin: 0 auto 12px;
+    text-shadow: none;
+}
+#overlay #win_message #statsRecord {
+    display: block;
+}
+#overlay #win_message #more_stats {
+    display: none;
+}
+#overlay #gameUrl {
+    border: 1px solid #aaa;
+    box-shadow: inset 1px 1px 4px #ccc;
+    padding: 4px 2px;
+    width: 100%;
+}

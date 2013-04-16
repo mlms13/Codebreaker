@@ -1,0 +1,135 @@
+/**************************
+ * Main game board styles *
+ **************************/
+#codebreaker_game {
+    background: #fff;
+    border: 3px solid #370;
+    box-shadow: inset 1px 3px 12px #555;
+    margin: 0 auto;
+    min-height: 380px;
+    overflow: hidden;
+    padding: 8px 16px 64px;
+    position: relative;
+    width: 40%;
+}
+
+#game_board {
+    overflow: hidden;
+    -ms-user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+}
+.row {
+    clear: both;
+    display: table;
+    overflow: hidden;
+    margin: 0 auto;
+    padding: 2px 0;
+}
+.row.active {
+    background: #ddefcf;
+}
+.holder {
+    background: #e4e4e4;
+    border-radius: 17px;
+    box-shadow: inset 1px 1px 2px #aaa;
+    display: inline-block;
+    height: 34px;
+    margin: 3px 8px;
+    width: 34px;
+}
+.active .holder {
+    background: #bbb;
+    box-shadow: inset 1px 1px 2px #666;
+    cursor: pointer;
+}
+.active .holder.drop_hover {
+    background: #ccc;
+    box-shadow: inset 1px 1px 3px #888;
+}
+.holder.selected {
+    border: 1px solid #888;
+    height: 32px;
+    width: 32px;
+}
+.holder.selected .marble {
+    height: 32px;
+    width: 32px;
+}
+.holder .marble {
+    border-radius: 17px;
+    box-shadow: 1px 1px 2px #666;
+    height: 34px;
+    width: 34px;
+}
+.holder .marble.ui-draggable-dragging {
+    z-index: 1;
+}
+.holder .marble.red {
+    background: #b30;
+    background: -moz-radial-gradient(30% 25% 0deg, ellipse farthest-side, #e61 0%, #b30 100%);
+    background: -webkit-gradient(radial, 8 8, 0, 4 8, 20, from(#e61), to(#b30));
+}
+.holder .marble.orange {
+    background: #d80;
+    background: -moz-radial-gradient(30% 25% 0deg, ellipse farthest-side, #fc6 0%, #d80 100%);
+    background: -webkit-gradient(radial, 8 8, 0, 4 8, 20, from(#fc6), to(#d80));
+}
+.holder .marble.yellow {
+    background: #ed0;
+    background: -moz-radial-gradient(30% 25% 0deg, ellipse farthest-side, #ffb 0%, #ed0 100%);
+    background: -webkit-gradient(radial, 8 8, 0, 4 8, 20, from(#ffb), to(#ed0));
+}
+.holder .marble.green {
+    background: #7b0;
+    background: -moz-radial-gradient(30% 25% 0deg, ellipse farthest-side, #ae5 0%, #7b0 100%);
+    background: -webkit-gradient(radial, 8 8, 0, 4 8, 20, from(#ae5), to(#7b0));
+}
+.holder .marble.blue {
+    background: #39c;
+    background: -moz-radial-gradient(30% 25% 0deg, ellipse farthest-side, #6cf 0%, #39c 100%);
+    background: -webkit-gradient(radial, 8 8, 0, 4 8, 20, from(#6cf), to(#39c));
+}
+.holder .marble.purple {
+    background: #95b;
+    background: -moz-radial-gradient(30% 25% 0deg, ellipse farthest-side, #c7e 0%, #95b 100%);
+    background: -webkit-gradient(radial, 8 8, 0, 4 8, 20, from(#c7e), to(#95b));
+}
+.holder .marble.pink {
+    background: #f9b;
+    background: -moz-radial-gradient(30% 25% 0deg, ellipse farthest-side, #fbd 0%, #f9b 100%);
+    background: -webkit-gradient(radial, 8 8, 0, 4 8, 20, from(#fbd), to(#f9b));
+}
+.holder .marble.brown {
+    background: #a75;
+    background: -moz-radial-gradient(30% 25% 0deg, ellipse farthest-side, #db7 0%, #a75 100%);
+    background: -webkit-gradient(radial, 8 8, 0, 4 8, 20, from(#db7), to(#a75));
+}
+.paused .holder .marble {
+    background: #999;
+    background: -moz-radial-gradient(30% 25% 0deg, ellipse farthest-side, #aaa 0%, #777 100%);
+    background: -webkit-gradient(radial, 8 8, 0, 4 8, 20, from(#aaa), to(#777));
+}
+#color_chooser {
+    background: #666;
+    background-image: linear-gradient(#666, #888);
+    box-shadow: 0px 0px 12px #111;
+    bottom: 0px;
+    height: 34px;
+    left: 0px;
+    padding: 6px 0;
+    position: absolute;
+    width: 100%;
+}
+#color_chooser .holder {
+    background: transparent;
+    bottom: 6px;
+    margin: 0;
+    position: absolute;
+}
+#color_chooser .holder .marble {
+    box-shadow: 1px 1px 2px #444;
+    cursor: pointer;
+    position: relative;
+}
