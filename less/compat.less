@@ -1,0 +1,31 @@
+// hide all compatibility messages by default
+.compat-message {
+    background: #feb;
+    border-bottom: 2px solid #a70;
+    color: #730;
+    display: none;
+    padding: 12px 24px;
+
+    &.critical {
+        background: #fee;
+        border-bottom-color: #e33;
+        color: #b30;
+    }
+
+    a {
+        color: #700;
+    }
+    p {
+        margin: 0;
+    }
+}
+
+.no-js #message-js {
+    display: block;
+}
+.js.no-generatedcontent #message-old {
+    display: block;
+}
+.js.generatedcontent.no-borderradius #message-untested {
+    display: block;
+}

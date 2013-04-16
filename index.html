@@ -1,8 +1,5 @@
 <!DOCTYPE html>
-<!--[if lt IE 7 ]><html class="ie6" lang="en"> <![endif]-->
-<!--[if IE 7 ]><html class="ie7" lang="en"> <![endif]-->
-<!--[if IE 8 ]><html class="ie8" lang="en"> <![endif]-->
-<!--[if (gte IE 9)|!(IE)]><!--> <html lang="en"> <!--<![endif]-->
+<html lang="en-us" class="no-js">
     <head>
         <meta charset="utf-8" />
         <title>Codebreaker</title>
@@ -11,17 +8,16 @@
         <script src="js/modernizr.js"></script>
     </head>
     <body>
-        <noscript>
-            <div class="compatWarning">
-                It looks like you have JavaScript disabled in your web browser. Because this game is built with JavaScript, it won't be functional unless you enable JavaScript for this site.
-            </div>
-        </noscript>
-        <div class="compatWarning" id="ie8Warning">
-            It looks like you're using Internet Explorer 8. While the game should be playable, your browser isn't supported, and you'll probably have a much better experience if you use <a href="http://www.mozilla.com/en-US/firefox/">Firefox 3.6+</a> or <a href="http://www.google.com/chrome">Google Chrome</a> instead.
-        </div>
-        <div class="compatWarning" id="ieOldWarning">
-            It looks like you're using an old version of Internet Explorer. This game highlights new web technologies, so most things probably won't work correctly in your browser, and there aren't any plans to add support in the future.  To play the game, it is recommended that you use <a href="http://www.mozilla.com/en-US/firefox/">Firefox 3.6+</a> or <a href="http://www.google.com/chrome">Google Chrome</a>.
-        </div>
+        <section class="compat-message icon-warning critical" id="message-js">
+            <p>Your web browser appears to have JavaScript disabled. Because this game is built with JavaScript, you won't be able to play unless you enable JavaScript for this website.</p>
+        </section>
+        <section class="compat-message icon-warning critical" id="message-old">
+            <p>It looks like you're using an older web browser that isn't able to properly run this game. You will have a better experience if you update your browser or use the latest version of <a href="http://www.mozilla.com/en-US/firefox/">Firefox</a> or <a href="http://www.google.com/chrome">Chrome</a> instead.</p>
+        </section>
+        <section class="compat-message icon-warning" id="message-untested">
+            <p>Your web browser isn't compatible with all of the features used by this game. While the game may still be playable, it hasn't been fully tested in your browser. You will have a better experience if you update your browser or use the latest version of <a href="http://www.mozilla.com/en-US/firefox/">Firefox</a> or <a href="http://www.google.com/chrome">Chrome</a> instead.</p>
+        </section>
+
         <h1>Codebreaker</h1>
         <div id="codebreaker_game">
             <div id="menu">

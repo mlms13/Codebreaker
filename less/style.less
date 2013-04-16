@@ -6,7 +6,6 @@
   src: local('Fontdiner Swanky'), local('FontdinerSwanky'), url('../fonts/FontdinerSwanky.woff') format('woff');
 }
 
-
 /***************************************
  * Main styles for the Codebreaker game *
  ***************************************/
@@ -14,7 +13,7 @@
 body {
     background: #222;
     font: 13px sans-serif;
-    margin: 30px 0 0;
+    margin: 0;
 }
 h1 {
     background: #370;
@@ -22,7 +21,7 @@ h1 {
     border-radius: 16px 16px 0 0;
     color: #e6ffdb;
     font: 38px/24px 'Fontdiner Swanky', sans-serif;
-    margin: 0 auto;
+    margin: 30px auto 0;
     padding: 4px 19px 6px;
     text-align: center;
     text-shadow: -2px -2px 1px #360;
@@ -31,24 +30,8 @@ h1 {
 /**************************
  * Compatibility Warnings *
  **************************/
-#ie8Warning, #ieOldWarning {
-    display: none;
-}
-.ie7 #ieOldWarning, .ie6 #ieOldWarning{
-    display: block;
-}
-.ie8 #ie8Warning {
-    display: block;
-}
-.compatWarning {
-    background: #ffe7c3;
-    color: #730;
-    padding: 12px 24px;
-}
-.compatWarning a {
-    background: transparent;
-    color: #950;
-}
+@import "compat";
+
 /***************
  * Menu styles *
  ***************/
