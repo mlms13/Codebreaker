@@ -20,18 +20,11 @@
 
         <h1>Codebreaker</h1>
         <div id="codebreaker_game">
-            <div id="menu">
-                <div class="menuItem" id="pref_button_container" title="Preferences">
-                    <div id="preferences_button">*</div>
-                </div>
-                <div class="menuItem" id="pauseButton" title="Pause">
-                    <div class="first"></div>
-                    <div></div>
-                </div>
-                <div class="menuItem" id="shareButton" title="Share this Game">
-                    &#8680;
-                </div>
-            </div>
+            <menu type="toolbar" id="main-menu">
+                <li><button class="hide-text icon-wrench" id="pref-button" title="Preferences">Preferences</button></li>
+                <li><button class="hide-text icon-pause" id="pause-button" title="Pause the game">Pause</button></li>
+                <li><button class="hide-text icon-share" id="share-button" title="Share this game">Share</button></li>
+            </menu>
             <div id="game_board"></div>
             <div id="color_chooser"></div>
             <div id="overlay">

@@ -264,17 +264,17 @@ function BuildDialogButtons()
 }
 function BuildMenuButtons()
 {
-    $('#preferences_button').click(function() {
+    $('#pref-button').click(function() {
         console.log("The preferences button was clicked.");
         tempNumberOfColors = numberOfColors;
         tempNumberOfHoles = numberOfHoles;
         tempNumberOfGuesses = numberOfGuesses;
         ShowDialog($('.dialog#preferences'), Pause);
     });
-    $('#pauseButton').click(function() {
+    $('#pause-button').click(function() {
         ShowDialog($('.dialog#paused'), Pause);
     });
-    $('#shareButton').click(function() {
+    $('#share-button').click(function() {
         StorePattern();
     });
 }
