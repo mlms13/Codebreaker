@@ -1,8 +1,13 @@
-var numberOfColors = 6,
-    numberOfHoles = 4,
-    numberOfGuesses = 10,
-    allowDuplicateColors = true,
-    potentialColors = ["red", "orange", "yellow", "green", "blue", "purple", "pink", "brown"], // All possible colors
+var Game = Game || {};
+
+Game.settings = {
+    'colors':       6,
+    'holes':        4,
+    'guesses':      10,
+    'duplicates':   true
+}
+
+var potentialColors = ["red", "orange", "yellow", "green", "blue", "purple", "pink", "brown"], // All possible colors
     colors, // Allowable colors, taken from potentialColors and based on numberOfColors
     solution, // The sequence that the user is trying to guess
     guessPattern, // A pattern containing the user's guess
@@ -43,10 +48,10 @@ function InitializeSettings()
     var settings = GetCookie('settings') || '6,4,10,true'; // retrieve settings from a cookie, or use defaults
     console.log('settings set to: ' + settings);
     settings = settings.split(',');
-    numberOfColors = parseInt(settings[0]);
-    numberOfHoles = parseInt(settings[1]);
-    numberOfGuesses = parseInt(settings[2]);
-    allowDuplicateColors = settings[3] === 'true';
+    Game.settings.colors = parseInt(settings[0]);
+    Game.settings.holes = parseInt(settings[1]);
+    Game.settings.guesses = parseInt(settings[2]);
+    Game.settings.duplicates = settings[3] === 'true';
 }
 function BuildGame()
 {
@@ -87,7 +92,7 @@ function ResetGame()
 function InitializeVariables()
 {
     console.log("InitializeVariables was called.");
-    colors = potentialColors.slice(0, numberOfColors);
+    colors = potentialColors.slice(0, Game.settings.colors);
     solution = [];
     guessPattern = [];
     currentRound = 0;
@@ -101,17 +106,17 @@ function BuildBoard()
 {
     var i = 0;
     SetMinimumWidth();
-    for (i = 0; i < numberOfGuesses; i++) {
+    for (i = 0; i < Game.settings.guesses; i++) {
         $('#game_board').append('<div class="row"></div>');
     }
-    for (i = 0; i < numberOfHoles; i++) {
+    for (i = 0; i < Game.settings.holes; i++) {
         $('#game_board .row').append('<div class="holder"></div>');
     }
-    $('#game_board .row').append('<div class="display_correct contains' + numberOfHoles + '"></div>');
-    for (i = 0; i < numberOfHoles; i++) {
+    $('#game_board .row').append('<div class="display_correct contains' + Game.settings.holes + '"></div>');
+    for (i = 0; i < Game.settings.holes; i++) {
         $('.display_correct').append('<div class="correct_marker"></div>');
     }
-    if (numberOfHoles === 5) {
+    if (Game.settings.holes === 5) {
         $('.display_correct div:nth-child(3)').addClass('center_marker');
     }
     
@@ -122,9 +127,9 @@ function BuildBoard()
 }
 function SetMinimumWidth()
 {
-    var minimumWidth = Math.max((numberOfColors + 1) * 48, (numberOfHoles + 1) * 52, 350),
-        dialogMinimumWidth = Math.max(numberOfHoles * 50, 268);
-    if (numberOfHoles === 6) {
+    var minimumWidth = Math.max((Game.settings.colors + 1) * 48, (Game.settings.holes + 1) * 52, 350),
+        dialogMinimumWidth = Math.max(Game.settings.holes * 50, 268);
+    if (Game.settings.holes === 6) {
         minimumWidth += 4;
     }
     $('h1').css('minWidth', minimumWidth + 'px');
@@ -137,7 +142,7 @@ function BuildColorPicker()
         selectedIndex,
         clicksSinceAddingColor = 0,
         dragDistance = 0;
-    for (i = 0; i < numberOfColors; i++) {
+    for (i = 0; i < Game.settings.colors; i++) {
         $('#color_chooser').append('<div class="holder"><div class="marble ' + colors[i] + '"></div></div>');
         $('#color_chooser .holder').each(function() {
             var n = $(this).index(),
@@ -174,10 +179,10 @@ function BuildColorPicker()
 }
 function BuildPreferences()
 {   
-    $('#opt_colors li:contains(' + numberOfColors + ')').addClass('current');
-    $('#opt_length li:contains(' + numberOfHoles + ')').addClass('current');
-    $('#opt_guesses li:contains(' + numberOfGuesses + ')').addClass('current');
-    if (!allowDuplicateColors) {
+    $('#opt_colors li:contains(' + Game.settings.colors + ')').addClass('current');
+    $('#opt_length li:contains(' + Game.settings.holes + ')').addClass('current');
+    $('#opt_guesses li:contains(' + Game.settings.guesses + ')').addClass('current');
+    if (!Game.settings.duplicates) {
         $('#preferences #checkmark').hide();
     }
 }
@@ -236,11 +241,11 @@ function BuildDialogButtons()
     });
     $('#preferences  .button:contains("Save")').click(function() {
         console.log("Save was clicked.");
-        numberOfColors = tempNumberOfColors;
-        numberOfHoles = tempNumberOfHoles;
-        numberOfGuesses = tempNumberOfGuesses;
-        allowDuplicateColors = $('#preferences #checkmark').is(':visible');
-        SetCookie('settings', [numberOfColors, numberOfHoles, numberOfGuesses, allowDuplicateColors].join(), 90);
+        Game.settings.colors = tempNumberOfColors;
+        Game.settings.holes = tempNumberOfHoles;
+        Game.settings.guesses = tempNumberOfGuesses;
+        Game.settings.duplicates = $('#preferences #checkmark').is(':visible');
+        SetCookie('settings', [Game.settings.colors, Game.settings.holes, Game.settings.guesses, Game.settings.duplicates].join(), 90);
         HideDialog();
         ResetBoard();
         StartGame();
@@ -266,9 +271,9 @@ function BuildMenuButtons()
 {
     $('#pref-button').click(function() {
         console.log("The preferences button was clicked.");
-        tempNumberOfColors = numberOfColors;
-        tempNumberOfHoles = numberOfHoles;
-        tempNumberOfGuesses = numberOfGuesses;
+        tempNumberOfColors = Game.settings.colors;
+        tempNumberOfHoles = Game.settings.holes;
+        tempNumberOfGuesses = Game.settings.guesses;
         ShowDialog($('.dialog#preferences'), Pause);
     });
     $('#pause-button').click(function() {
@@ -290,20 +295,20 @@ function ChooseNewPattern(game)
         console.log(game);
         solution = game;
     }
-    else if (allowDuplicateColors) {
-        for (i = 0; i < numberOfHoles; i++) {
-            rand = Math.floor(Math.random() * numberOfColors);
+    else if (Game.settings.duplicates) {
+        for (i = 0; i < Game.settings.holes; i++) {
+            rand = Math.floor(Math.random() * Game.settings.colors);
             solution[i] = colors[rand];
         }
     }
     else {
         for (i = 0; i < tempColors.length; i++) {
-            rand = Math.floor(Math.random() * numberOfColors);
+            rand = Math.floor(Math.random() * Game.settings.colors);
             tempHolder = tempColors[i];
             tempColors[i] = tempColors[rand];
             tempColors[rand] = tempHolder;
         }
-        for (i = 0; i < numberOfHoles; i++) {
+        for (i = 0; i < Game.settings.holes; i++) {
             solution[i] = tempColors[i];
         }
     }
@@ -313,10 +318,10 @@ function StartNewRound()
     var i = 0,
         row;
     currentRound++;
-    for (i = 0; i < numberOfHoles; i++) {
+    for (i = 0; i < Game.settings.holes; i++) {
         guessPattern[i] = null;
     }
-    row = numberOfGuesses - (currentRound - 1);
+    row = Game.settings.guesses - (currentRound - 1);
     $('#game_board .row:nth-child(' + row + ')').addClass('active');
     
     $('.active .holder').droppable({
@@ -331,7 +336,7 @@ function StartNewRound()
 function GetFirstEmptySlot()
 {
     var i;
-    for (i = 0; i < numberOfHoles; i++)
+    for (i = 0; i < Game.settings.holes; i++)
     {
         if (guessPattern[i] == null) {
             return i;
@@ -346,7 +351,7 @@ function GetDroppedColor()
     selectedColor = selectedColor.replace("marble", "");
     selectedColor = selectedColor.replace("ui-draggable", "");
     selectedColor = selectedColor.replace("ui-draggable-dragging", "");
-    for (i = 0; i < numberOfColors; i++) {
+    for (i = 0; i < Game.settings.colors; i++) {
         if (selectedColor.search(colors[i]) != -1) {
             selectedColor = colors[i];
             break;
@@ -382,7 +387,7 @@ function CheckForCompleteGuess()
 {
     var allColorsChosen = true,
         i = 0;
-    for (i = 0; i < numberOfHoles; i++) {
+    for (i = 0; i < Game.settings.holes; i++) {
         if (guessPattern[i] == null) {
             allColorsChosen = false;
             break;
@@ -401,7 +406,7 @@ function EvaluateGuess()
         i = 0,
         j = 0;
     // First, look only for exact matches
-    for (i = 0; i < numberOfHoles; i++) {
+    for (i = 0; i < Game.settings.holes; i++) {
         if (guessPatternCopy[i] == solutionCopy[i]) {
             solutionCopy[i] = null;
             guessPatternCopy[i] = null;
@@ -410,9 +415,9 @@ function EvaluateGuess()
     }
     // Then, look for remaining colors that are correct
     // TODO: Use filter() here to clear out the null values
-    for (i = 0; i < numberOfHoles; i++) {
+    for (i = 0; i < Game.settings.holes; i++) {
         if (guessPatternCopy[i] != null) {
-            for (j = 0; j < numberOfHoles; j++) {
+            for (j = 0; j < Game.settings.holes; j++) {
                 if (guessPatternCopy[i] == solutionCopy[j]) {
                     correctColors++;
                     solutionCopy[j] = null;
@@ -429,11 +434,11 @@ function EvaluateGuess()
         $('.active .display_correct div:nth-child(' + (correctPieces + i + 1) + ')').addClass('white');
     }
     EndRound();
-    if (correctPieces == numberOfHoles) {
+    if (correctPieces == Game.settings.holes) {
         HandleWinGame();
     }
     else {
-        if (currentRound < numberOfGuesses) {
+        if (currentRound < Game.settings.guesses) {
             StartNewRound();
         }
         else {
@@ -452,8 +457,8 @@ function EndRound()
 function HandleWinGame()
 {
     var d = new Date(),
-        cookieSuffix = String(numberOfColors) + '_' + String(numberOfHoles) + '_' + 
-            String(numberOfGuesses) + '_' + String(Number(allowDuplicateColors)),
+        cookieSuffix = String(Game.settings.colors) + '_' + String(Game.settings.holes) + '_' + 
+            String(Game.settings.guesses) + '_' + String(Number(Game.settings.duplicates)),
         wins = parseInt(GetCookie('wins' + cookieSuffix), 10) || 0,
         losses = parseInt(GetCookie('losses' + cookieSuffix), 10) || 0,
         gamesPlayed,
@@ -474,7 +479,7 @@ function HandleWinGame()
     $('#time_to_win').html(FormatTimeToWin(gameTime));
     $('#show_more_stats').text('See More Statistics and Averages');
     $('#more_stats').hide();
-    $('#statsSetup').html(numberOfColors + ' colors, ' + numberOfHoles + ' holes, ' + (allowDuplicateColors ? 'and ' : '') + numberOfGuesses + ' guesses' + (allowDuplicateColors ? '' : ', and no duplicates'));
+    $('#statsSetup').html(Game.settings.colors + ' colors, ' + Game.settings.holes + ' holes, ' + (Game.settings.duplicates ? 'and ' : '') + Game.settings.guesses + ' guesses' + (Game.settings.duplicates ? '' : ', and no duplicates'));
     $('#statsRecord').html(
         'Your averages after ' + wins + ' win' + (wins === 1 ? '' : 's') +
         (losses === 0 ? '<br />(and no losses)' :
@@ -485,13 +490,13 @@ function HandleWinGame()
 }
 function HandleLoseGame()
 {
-    var cookieSuffix = String(numberOfColors) + '_' + String(numberOfHoles) + '_' + 
-            String(numberOfGuesses) + '_' + String(Number(allowDuplicateColors)),
+    var cookieSuffix = String(Game.settings.colors) + '_' + String(Game.settings.holes) + '_' + 
+            String(Game.settings.guesses) + '_' + String(Number(Game.settings.duplicates)),
         losses = parseInt(GetCookie('losses' + cookieSuffix), 10) || 0;
     losses++;
     SetCookie('losses' + cookieSuffix, String(losses), 90);
     $('#solution').empty();
-    for (i = 0; i < numberOfHoles; i++) {
+    for (i = 0; i < Game.settings.holes; i++) {
         $('#solution').append('<div class="holder"><div class="marble ' + solution[i] + '"></div></div>');
     }
     ShowDialog($('.dialog#lose_message'));
@@ -595,10 +600,10 @@ function RetrievePattern(urlHash)
         }
         else {
             pattern = data.pattern.split('.');
-            numberOfColors = parseInt(data.colors);
-            numberOfHoles = pattern.length;
-            numberOfGuesses = parseInt(data.guesses);
-            allowDuplicateColors = parseInt(data.duplicates) === 1;
+            Game.settings.colors = parseInt(data.colors);
+            Game.settings.holes = pattern.length;
+            Game.settings.guesses = parseInt(data.guesses);
+            Game.settings.duplicates = parseInt(data.duplicates) === 1;
             BuildGame();
             StartGame(pattern);
             console.log('A specific game was requested: ' + pattern);
@@ -614,7 +619,7 @@ function RetrievePattern(urlHash)
 }
 function StorePattern()
 {
-    $.post('./scripts/storePattern.php', {'colors[]': solution, numberOfColors: numberOfColors, numberOfGuesses: numberOfGuesses, repeat: allowDuplicateColors}, function(data) {
+    $.post('./scripts/storePattern.php', {'colors[]': solution, numberOfColors: Game.settings.colors, numberOfGuesses: Game.settings.guesses, repeat: Game.settings.duplicates}, function(data) {
         if (data.error != null) {
             $('#errorMessage').html('Something went wrong while getting an id for this game: ' + data.error);
             $('#startNewGame').hide();
