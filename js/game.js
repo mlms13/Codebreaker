@@ -5,7 +5,7 @@ Game.settings = {
     'holes':        4,
     'guesses':      10,
     'duplicates':   true
-}
+};
 
 var potentialColors = ["red", "orange", "yellow", "green", "blue", "purple", "pink", "brown"], // All possible colors
     colors, // Allowable colors, taken from potentialColors and based on numberOfColors
