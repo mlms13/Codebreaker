@@ -8,17 +8,17 @@ App.settings = {
 };
 
 App.game = {
-    solution:       [], // the sequence that the player is trying to guess
-    guess:          [], // the player's guess
-    round:          0
+    'solution':       [], // the sequence that the player is trying to guess
+    'guess':          [], // the player's guess
+    'round':          0
 };
 
 App.timer = {
-    startTime:      0,
-    endTime:        0,
-    paused:         false,
-    pauseStart:     0,
-    pauseLength:    0
+    'startTime':      0,
+    'endTime':        0,
+    'paused':         false,
+    'pauseStart':     0,
+    'pauseLength':    0
 };
 
 var potentialColors = ["red", "orange", "yellow", "green", "blue", "purple", "pink", "brown"], // All possible colors
