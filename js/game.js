@@ -1,6 +1,7 @@
 var App = App || {};
 
 App.settings = {
+    'allColors':    ["red", "orange", "yellow", "green", "blue", "purple", "pink", "brown"],
     'colors':       6,
     'holes':        4,
     'guesses':      10,
@@ -13,12 +14,12 @@ App.settings = {
             settings = settings.split(',');
             console.log('settings set to: ' + settings);
 
-            App.settings = {
+            App.settings = $.extend(App.settings, {
                 'colors': parseInt(settings[0], 10),
                 'holes': parseInt(settings[1], 10),
                 'guesses': parseInt(settings[2], 10),
                 'duplicates': (settings[3] === 'true')
-            };
+            });
         } else {
             console.log('No settings stored in cookies.');
         }
@@ -72,9 +73,7 @@ App.timer = (function () {
 }());
 
 
-var potentialColors = ["red", "orange", "yellow", "green", "blue", "purple", "pink", "brown"], // All possible colors
-    colors, // Allowable colors, taken from potentialColors and based on numberOfColors
-    tempNumberOfColors,
+var tempNumberOfColors,
     tempNumberOfHoles,
     tempNumberOfGuesses;
 
@@ -138,7 +137,7 @@ function ResetGame()
 /****** Build Game Helpers *****/
 function InitializeVariables()
 {
-    colors = potentialColors.slice(0, App.settings.colors);
+    colors = App.settings.allColors.slice(0, App.settings.colors);
     App.game.solution = [];
     App.game.guess = [];
     App.game.round = 0;
@@ -184,7 +183,7 @@ function BuildColorPicker()
         clicksSinceAddingColor = 0,
         dragDistance = 0;
     for (i = 0; i < App.settings.colors; i++) {
-        $('#color_chooser').append('<div class="holder"><div class="marble ' + colors[i] + '"></div></div>');
+        $('#color_chooser').append('<div class="holder"><div class="marble ' + App.settings.allColors[i] + '"></div></div>');
         $('#color_chooser .holder').each(function() {
             var n = $(this).index(),
                 left = (48 * n) + 16;
@@ -208,13 +207,13 @@ function BuildColorPicker()
         selectedIndex = $('#game_board .selected').index();
         clicksSinceAddingColor++;
         if (selectedIndex !== -1) {
-            HandleChooseColor(selectedIndex, colors[$(this).parent('.holder').index()]);
+            HandleChooseColor(selectedIndex, App.settings.allColors[$(this).parent('.holder').index()]);
             clicksSinceAddingColor = 0;
         }
     }).dblclick(function() {
         console.log("You double-clicked on a color.");
         if (clicksSinceAddingColor > 1) {
-            HandleChooseColor(GetFirstEmptySlot(), colors[$(this).parent('.holder').index()]);
+            HandleChooseColor(GetFirstEmptySlot(), App.settings.allColors[$(this).parent('.holder').index()]);
         }
     });
 }
@@ -329,7 +328,7 @@ function ChooseNewPattern(game)
 {
     var i = 0,
         rand = 0,
-        tempColors = colors.slice(0),
+        tempColors = App.settings.allColors.slice(0),
         tempHolder;
     
     if (game != null) {
@@ -393,8 +392,8 @@ function GetDroppedColor()
     selectedColor = selectedColor.replace("ui-draggable", "");
     selectedColor = selectedColor.replace("ui-draggable-dragging", "");
     for (i = 0; i < App.settings.colors; i++) {
-        if (selectedColor.search(colors[i]) != -1) {
-            selectedColor = colors[i];
+        if (selectedColor.search(App.settings.allColors[i]) != -1) {
+            selectedColor = App.settings.allColors[i];
             break;
         }
     }
