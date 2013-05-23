@@ -13,13 +13,46 @@ App.game = {
     'round':          0
 };
 
-App.timer = {
-    'startTime':      0,
-    'endTime':        0,
-    'paused':         false,
-    'pauseStart':     0,
-    'pauseLength':    0
-};
+App.timer = (function () {
+    var obj = {},
+        startTime = 0,
+        paused = false,
+        pauseStart = 0,
+        pauseLength = 0;
+
+    obj.start = function () {
+        startTime = Date.now();
+    };
+
+    obj.pause = function () {
+        if (startTime > 0 && !paused) {
+            pauseStart = Date.now();
+            $('#game_board').addClass('paused');
+            paused = true;
+            console.log('The timer is paused.');
+        } else {
+            console.log("Can't pause because either the game is not running or the game is already paused.");
+        }
+    };
+
+    obj.resume = function () {
+        if (paused) {
+            pauseLength += Date.now() - pauseStart;
+            $('#game_board').removeClass('paused');
+            paused = false;
+            console.log("Resuming. Paused for " + pauseLength + "ms.");
+        } else {
+            console.log("Not resuming because the game wasn't paused.");
+        }
+    };
+
+    obj.getElapsedTime = function () {
+        return Date.now() - startTime - pauseLength;
+    };
+
+    return obj;
+}());
+
 
 var potentialColors = ["red", "orange", "yellow", "green", "blue", "purple", "pink", "brown"], // All possible colors
     colors, // Allowable colors, taken from potentialColors and based on numberOfColors
@@ -71,7 +104,7 @@ function StartGame(game)
     var d = new Date();
     ChooseNewPattern(game);
     StartNewRound();
-    App.timer.start = d.getTime();
+    App.timer.start();
 }
 function ResetBoard()
 {
@@ -101,11 +134,6 @@ function InitializeVariables()
     App.game.solution = [];
     App.game.guess = [];
     App.game.round = 0;
-    App.timer.start = 0;
-    App.timer.end = 0;
-    App.timer.paused = false;
-    App.timer.pauseStart = 0;
-    App.timer.pauseLength = 0;
 }
 function BuildBoard()
 {
@@ -241,7 +269,7 @@ function BuildDialogButtons()
     });
     $('#preferences .button:contains("Cancel")').click(function() {
         console.log("Cancel was clicked.");
-        Resume();
+        App.timer.resume();
         HideDialog();
     });
     $('#preferences  .button:contains("Save")').click(function() {
@@ -256,11 +284,11 @@ function BuildDialogButtons()
         StartGame();
     });
     $('.dialog .button:contains("Resume"), .dialog .button:contains("Continue")').click(function() {
-        Resume();
+        App.timer.resume();
         HideDialog();
     });
     $('.dialog .button:contains("Okay")').click(function() {
-        Resume();
+        App.timer.resume();
         HideDialog();
     });
     $('.dialog .button:contains("No Thanks")').click(function() {
@@ -279,10 +307,10 @@ function BuildMenuButtons()
         tempNumberOfColors = App.settings.colors;
         tempNumberOfHoles = App.settings.holes;
         tempNumberOfGuesses = App.settings.guesses;
-        ShowDialog($('.dialog#preferences'), Pause);
+        ShowDialog($('.dialog#preferences'), App.timer.pause);
     });
     $('#pause-button').click(function() {
-        ShowDialog($('.dialog#paused'), Pause);
+        ShowDialog($('.dialog#paused'), App.timer.pause);
     });
     $('#share-button').click(function() {
         StorePattern();
@@ -470,10 +498,10 @@ function HandleWinGame()
         gameTime,
         totalTime = parseInt(GetCookie('totalTime' + cookieSuffix), 10) || 0,
         avgRounds = parseFloat(GetCookie('avgRounds' + cookieSuffix)) || 0;
-    App.timer.end = d.getTime();
+
     wins++;
     gamesPlayed = wins + losses;
-    gameTime = (App.timer.end - App.timer.start) - App.timer.pauseLength;
+    gameTime = App.timer.getElapsedTime();
     totalTime += gameTime;
     avgRounds = (avgRounds * (gamesPlayed - 1) + App.game.round) / wins;
     console.log("avgRounds: " + avgRounds);
@@ -505,32 +533,6 @@ function HandleLoseGame()
         $('#solution').append('<div class="holder"><div class="marble ' + App.game.solution[i] + '"></div></div>');
     }
     ShowDialog($('.dialog#lose_message'));
-}
-function Pause()
-{
-    var d = new Date();
-    if (App.timer.start != 0 && App.timer.end == 0) {
-        App.timer.pauseStart = d.getTime();
-        $('#game_board').addClass('paused');
-        App.timer.paused = true;
-        console.log("Pausing.");
-    }
-    else {
-        console.log("The clock isn't running.");
-    }
-}
-function Resume()
-{
-    var d = new Date();
-    if (App.timer.paused) {
-        App.timer.pauseLength += d.getTime() - App.timer.pauseStart;
-        $('#game_board').removeClass('paused');
-        App.timer.paused = false;
-        console.log("Resuming. Paused for " + App.timer.pauseLength + "ms.");
-    }
-    else {
-        console.log("Not resuming because the game was't paused.");
-    }
 }
 /***** Overlay Helpers *****/
 function ShowDialog(dialog, callback)
@@ -630,12 +632,12 @@ function StorePattern()
             $('#startNewGame').hide();
             $('.dialog#error .button').show();
             $('.dialog#error .button:contains("No Thanks"), .dialog#error .button:contains("Sure")').hide();
-            ShowDialog($('.dialog#error'), Pause);
+            ShowDialog($('.dialog#error'), App.timer.pause);
         }
         else {
             self.document.location.hash = '#' + data.url;
             $('#gameUrl').val(self.document.location);
-            ShowDialog($('.dialog#shareGame'), Pause);
+            ShowDialog($('.dialog#shareGame'), App.timer.pause);
         }
     }, 'json')
     
@@ -645,7 +647,7 @@ function StorePattern()
         $('#startNewGame').hide();
         $('.dialog#error .button').show();
             $('.dialog#error .button:contains("No Thanks"), .dialog#error .button:contains("Sure")').hide();
-        ShowDialog($('.dialog#error'), Pause);
+        ShowDialog($('.dialog#error'), App.timer.pause);
     });
 }
 /***** Cookie Helpers *****/
