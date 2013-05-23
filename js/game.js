@@ -7,16 +7,20 @@ App.settings = {
     'duplicates':   true
 };
 
+App.game = {
+    solution:       [], // the sequence that the player is trying to guess
+    guess:          [], // the player's guess
+    round:          0,
+    start:          0,
+    end:            0,
+    paused:         false,
+    pauseStart:     0,
+    pauseTime:      0,
+    pauseLength:    0
+};
+
 var potentialColors = ["red", "orange", "yellow", "green", "blue", "purple", "pink", "brown"], // All possible colors
     colors, // Allowable colors, taken from potentialColors and based on numberOfColors
-    solution, // The sequence that the user is trying to guess
-    guessPattern, // A pattern containing the user's guess
-    currentRound,
-    startTime,
-    endTime,
-    isPaused,
-    pauseStart,
-    pauseLength,
     tempNumberOfColors,
     tempNumberOfHoles,
     tempNumberOfGuesses;
@@ -65,7 +69,7 @@ function StartGame(game)
     var d = new Date();
     ChooseNewPattern(game);
     StartNewRound();
-    startTime = d.getTime();
+    App.game.start = d.getTime();
 }
 function ResetBoard()
 {
@@ -91,16 +95,15 @@ function ResetGame()
 /****** Build Game Helpers *****/
 function InitializeVariables()
 {
-    console.log("InitializeVariables was called.");
     colors = potentialColors.slice(0, App.settings.colors);
-    solution = [];
-    guessPattern = [];
-    currentRound = 0;
-    startTime = 0;
-    endTime = 0;
-    isPaused = false;
-    pauseStart = 0;
-    pauseLength = 0;
+    App.game.solution = [];
+    App.game.guess = [];
+    App.game.round = 0;
+    App.game.start = 0;
+    App.game.end = 0;
+    App.game.paused = false;
+    App.game.pauseStart = 0;
+    App.game.pauseTime = 0;
 }
 function BuildBoard()
 {
@@ -293,12 +296,12 @@ function ChooseNewPattern(game)
     
     if (game != null) {
         console.log(game);
-        solution = game;
+        App.game.solution = game;
     }
     else if (App.settings.duplicates) {
         for (i = 0; i < App.settings.holes; i++) {
             rand = Math.floor(Math.random() * App.settings.colors);
-            solution[i] = colors[rand];
+            App.game.solution[i] = colors[rand];
         }
     }
     else {
@@ -309,7 +312,7 @@ function ChooseNewPattern(game)
             tempColors[rand] = tempHolder;
         }
         for (i = 0; i < App.settings.holes; i++) {
-            solution[i] = tempColors[i];
+            App.game.solution[i] = tempColors[i];
         }
     }
 }
@@ -317,11 +320,11 @@ function StartNewRound()
 {
     var i = 0,
         row;
-    currentRound++;
+    App.game.round++;
     for (i = 0; i < App.settings.holes; i++) {
-        guessPattern[i] = null;
+        App.game.guess[i] = null;
     }
-    row = App.settings.guesses - (currentRound - 1);
+    row = App.settings.guesses - (App.game.round - 1);
     $('#game_board .row:nth-child(' + row + ')').addClass('active');
     
     $('.active .holder').droppable({
@@ -338,7 +341,7 @@ function GetFirstEmptySlot()
     var i;
     for (i = 0; i < App.settings.holes; i++)
     {
-        if (guessPattern[i] == null) {
+        if (App.game.guess[i] == null) {
             return i;
         }
     }
@@ -373,13 +376,13 @@ function HandleChooseColor(selectedSlot, selectedColor)
             start: function(event, ui) {
                 // hide the original marble while moving
                 $(this).hide();
-                guessPattern[selectedSlot] = null;
+                App.game.guess[selectedSlot] = null;
             },
             stop: function(event, ui) {
                 $(this).remove();
             }
         });
-        guessPattern[selectedSlot] = selectedColor;
+        App.game.guess[selectedSlot] = selectedColor;
         CheckForCompleteGuess();
     }
 }
@@ -388,7 +391,7 @@ function CheckForCompleteGuess()
     var allColorsChosen = true,
         i = 0;
     for (i = 0; i < App.settings.holes; i++) {
-        if (guessPattern[i] == null) {
+        if (App.game.guess[i] == null) {
             allColorsChosen = false;
             break;
         }
@@ -401,8 +404,8 @@ function EvaluateGuess()
 {
     var correctPieces = 0,
         correctColors = 0,
-        solutionCopy = solution.slice(0),
-        guessPatternCopy = guessPattern.slice(0),
+        solutionCopy = App.game.solution.slice(0),
+        guessPatternCopy = App.game.guess.slice(0),
         i = 0,
         j = 0;
     // First, look only for exact matches
@@ -438,7 +441,7 @@ function EvaluateGuess()
         HandleWinGame();
     }
     else {
-        if (currentRound < App.settings.guesses) {
+        if (App.game.round < App.settings.guesses) {
             StartNewRound();
         }
         else {
@@ -465,17 +468,17 @@ function HandleWinGame()
         gameTime,
         totalTime = parseInt(GetCookie('totalTime' + cookieSuffix), 10) || 0,
         avgRounds = parseFloat(GetCookie('avgRounds' + cookieSuffix)) || 0;
-    endTime = d.getTime();
+    App.game.end = d.getTime();
     wins++;
     gamesPlayed = wins + losses;
-    gameTime = (endTime - startTime) - pauseLength;
+    gameTime = (App.game.end - App.game.start) - App.game.pauseTime;
     totalTime += gameTime;
-    avgRounds = (avgRounds * (gamesPlayed - 1) + currentRound) / wins;
+    avgRounds = (avgRounds * (gamesPlayed - 1) + App.game.round) / wins;
     console.log("avgRounds: " + avgRounds);
     SetCookie('wins' + cookieSuffix, String(wins), 90);
     SetCookie('totalTime' + cookieSuffix, String(totalTime), 90);
     SetCookie('avgRounds' + cookieSuffix, String(avgRounds), 90);
-    $('#rounds_to_win').html('<span class="fancy">' + currentRound + '</span> guess' + (currentRound === 1 ? "" : "es"));
+    $('#rounds_to_win').html('<span class="fancy">' + App.game.round + '</span> guess' + (App.game.round === 1 ? "" : "es"));
     $('#time_to_win').html(FormatTimeToWin(gameTime));
     $('#show_more_stats').text('See More Statistics and Averages');
     $('#more_stats').hide();
@@ -497,17 +500,17 @@ function HandleLoseGame()
     SetCookie('losses' + cookieSuffix, String(losses), 90);
     $('#solution').empty();
     for (i = 0; i < App.settings.holes; i++) {
-        $('#solution').append('<div class="holder"><div class="marble ' + solution[i] + '"></div></div>');
+        $('#solution').append('<div class="holder"><div class="marble ' + App.game.solution[i] + '"></div></div>');
     }
     ShowDialog($('.dialog#lose_message'));
 }
 function Pause()
 {
     var d = new Date();
-    if (startTime != 0 && endTime == 0) {
-        pauseStart = d.getTime();
+    if (App.game.start != 0 && App.game.end == 0) {
+        App.game.pauseStart = d.getTime();
         $('#game_board').addClass('paused');
-        isPaused = true;
+        App.game.paused = true;
         console.log("Pausing.");
     }
     else {
@@ -517,11 +520,11 @@ function Pause()
 function Resume()
 {
     var d = new Date();
-    if (isPaused) {
-        pauseLength += d.getTime() - pauseStart;
+    if (App.game.paused) {
+        App.game.pauseLength += d.getTime() - App.game.pauseStart;
         $('#game_board').removeClass('paused');
-        isPaused = false;
-        console.log("Resuming. Paused for " + pauseLength + "ms.");   
+        App.game.paused = false;
+        console.log("Resuming. Paused for " + App.game.pauseLength + "ms.");
     }
     else {
         console.log("Not resuming because the game was't paused.");
@@ -619,7 +622,7 @@ function RetrievePattern(urlHash)
 }
 function StorePattern()
 {
-    $.post('./scripts/storePattern.php', {'colors[]': solution, numberOfColors: App.settings.colors, numberOfGuesses: App.settings.guesses, repeat: App.settings.duplicates}, function(data) {
+    $.post('./scripts/storePattern.php', {'colors[]': App.game.solution, numberOfColors: App.settings.colors, numberOfGuesses: App.settings.guesses, repeat: App.settings.duplicates}, function(data) {
         if (data.error != null) {
             $('#errorMessage').html('Something went wrong while getting an id for this game: ' + data.error);
             $('#startNewGame').hide();
