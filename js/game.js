@@ -4,7 +4,25 @@ App.settings = {
     'colors':       6,
     'holes':        4,
     'guesses':      10,
-    'duplicates':   true
+    'duplicates':   true,
+    'load': function () {
+        // load saved settings (e.g. '6,4,10,true') from cookie
+        var settings = GetCookie('settings');
+
+        if (settings) {
+            settings = settings.split(',');
+            console.log('settings set to: ' + settings);
+
+            App.settings = {
+                'colors': parseInt(settings[0], 10),
+                'holes': parseInt(settings[1], 10),
+                'guesses': parseInt(settings[2], 10),
+                'duplicates': (settings[3] === 'true')
+            };
+        } else {
+            console.log('No settings stored in cookies.');
+        }
+    }
 };
 
 App.game = {
@@ -63,7 +81,7 @@ var potentialColors = ["red", "orange", "yellow", "green", "blue", "purple", "pi
 $(document).ready(function() {
     var urlHash = self.document.location.hash.substring(1);
     MakeButtonsClickable();
-    InitializeSettings();
+    App.settings.load();
     // If a game is defined in the url, get the game from the server
     if (urlHash != '') {
         RetrievePattern(urlHash);
@@ -81,16 +99,6 @@ function MakeButtonsClickable()
     BuildDialogButtons();
     BuildPreferencesButtons();
     BuildMenuButtons();
-}
-function InitializeSettings()
-{
-    var settings = GetCookie('settings') || '6,4,10,true'; // retrieve settings from a cookie, or use defaults
-    console.log('settings set to: ' + settings);
-    settings = settings.split(',');
-    App.settings.colors = parseInt(settings[0]);
-    App.settings.holes = parseInt(settings[1]);
-    App.settings.guesses = parseInt(settings[2]);
-    App.settings.duplicates = settings[3] === 'true';
 }
 function BuildGame()
 {
