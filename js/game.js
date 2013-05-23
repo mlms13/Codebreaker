@@ -10,12 +10,14 @@ App.settings = {
 App.game = {
     solution:       [], // the sequence that the player is trying to guess
     guess:          [], // the player's guess
-    round:          0,
-    start:          0,
-    end:            0,
+    round:          0
+};
+
+App.timer = {
+    startTime:      0,
+    endTime:        0,
     paused:         false,
     pauseStart:     0,
-    pauseTime:      0,
     pauseLength:    0
 };
 
@@ -69,7 +71,7 @@ function StartGame(game)
     var d = new Date();
     ChooseNewPattern(game);
     StartNewRound();
-    App.game.start = d.getTime();
+    App.timer.start = d.getTime();
 }
 function ResetBoard()
 {
@@ -99,11 +101,11 @@ function InitializeVariables()
     App.game.solution = [];
     App.game.guess = [];
     App.game.round = 0;
-    App.game.start = 0;
-    App.game.end = 0;
-    App.game.paused = false;
-    App.game.pauseStart = 0;
-    App.game.pauseTime = 0;
+    App.timer.start = 0;
+    App.timer.end = 0;
+    App.timer.paused = false;
+    App.timer.pauseStart = 0;
+    App.timer.pauseLength = 0;
 }
 function BuildBoard()
 {
@@ -468,10 +470,10 @@ function HandleWinGame()
         gameTime,
         totalTime = parseInt(GetCookie('totalTime' + cookieSuffix), 10) || 0,
         avgRounds = parseFloat(GetCookie('avgRounds' + cookieSuffix)) || 0;
-    App.game.end = d.getTime();
+    App.timer.end = d.getTime();
     wins++;
     gamesPlayed = wins + losses;
-    gameTime = (App.game.end - App.game.start) - App.game.pauseTime;
+    gameTime = (App.timer.end - App.timer.start) - App.timer.pauseLength;
     totalTime += gameTime;
     avgRounds = (avgRounds * (gamesPlayed - 1) + App.game.round) / wins;
     console.log("avgRounds: " + avgRounds);
@@ -507,10 +509,10 @@ function HandleLoseGame()
 function Pause()
 {
     var d = new Date();
-    if (App.game.start != 0 && App.game.end == 0) {
-        App.game.pauseStart = d.getTime();
+    if (App.timer.start != 0 && App.timer.end == 0) {
+        App.timer.pauseStart = d.getTime();
         $('#game_board').addClass('paused');
-        App.game.paused = true;
+        App.timer.paused = true;
         console.log("Pausing.");
     }
     else {
@@ -520,11 +522,11 @@ function Pause()
 function Resume()
 {
     var d = new Date();
-    if (App.game.paused) {
-        App.game.pauseLength += d.getTime() - App.game.pauseStart;
+    if (App.timer.paused) {
+        App.timer.pauseLength += d.getTime() - App.timer.pauseStart;
         $('#game_board').removeClass('paused');
-        App.game.paused = false;
-        console.log("Resuming. Paused for " + App.game.pauseLength + "ms.");
+        App.timer.paused = false;
+        console.log("Resuming. Paused for " + App.timer.pauseLength + "ms.");
     }
     else {
         console.log("Not resuming because the game was't paused.");
