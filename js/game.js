@@ -79,7 +79,6 @@ var tempNumberOfColors,
 
 $(document).ready(function() {
     var urlHash = self.document.location.hash.substring(1);
-    MakeButtonsClickable();
     App.settings.load();
     // If a game is defined in the url, get the game from the server
     if (urlHash != '') {
@@ -92,13 +91,6 @@ $(document).ready(function() {
         StartGame();
     }
 });
-function MakeButtonsClickable()
-{
-    BuildWinDialog();
-    BuildDialogButtons();
-    BuildPreferencesButtons();
-    BuildMenuButtons();
-}
 function BuildGame()
 {
     InitializeVariables();
@@ -160,7 +152,7 @@ function BuildBoard()
         $('.display_correct div:nth-child(3)').addClass('center_marker');
     }
     
-    $('#game_board').delegate('.active .holder', 'click', function() {
+    $('#game_board').on('click', '.active .holder', function () {
         $('#game_board .selected').removeClass('selected');
         $(this).addClass('selected');
     });
@@ -226,103 +218,7 @@ function BuildPreferences()
         $('#preferences #checkmark').hide();
     }
 }
-function BuildPreferencesButtons()
-{
-    $('#preferences li').click(function() {
-        var category;
-        $(this).closest('ul').children('.current').removeClass('current');
-        $(this).addClass('current');
-        
-        category = $(this).closest('ul').attr('id');
 
-        if (category.indexOf('colors') !== -1) {
-            tempNumberOfColors = parseInt($(this).text(), 10);
-        }
-        else if (category.indexOf('length') !== -1) {
-            tempNumberOfHoles = parseInt($(this).text(), 10);
-        }
-        else if (category.indexOf('guesses') !== -1) {
-            tempNumberOfGuesses = parseInt($(this).text(), 10);
-        }
-    });
-    $('#preferences .checkbox').click(function() {
-        $(this).find('#checkmark').toggle();
-    });
-}
-function BuildWinDialog()
-{
-    $('#show_more_stats').click(function() {
-        if ($('#more_stats').is(':visible')) {
-            $('#more_stats').slideUp(300);
-            $(this).text('See More Statistics and Averages');
-        }
-        else {
-            $('#more_stats').slideDown(300);
-            $(this).text('Hide Statistics and Averages');
-        }
-    });
-}
-function BuildDialogButtons()
-{
-    $('.dialog .button:contains("I\'m Done")').click(function() {
-        console.log("I\'m Done was clicked.");
-        HideDialog();
-    });
-    $('.dialog .button:contains("Play Again")').click(function() {
-        console.log("Play Again was clicked.");
-        HideDialog();
-        ResetGame();
-        StartGame();
-    });
-    $('#preferences .button:contains("Cancel")').click(function() {
-        console.log("Cancel was clicked.");
-        App.timer.resume();
-        HideDialog();
-    });
-    $('#preferences  .button:contains("Save")').click(function() {
-        console.log("Save was clicked.");
-        App.settings.colors = tempNumberOfColors;
-        App.settings.holes = tempNumberOfHoles;
-        App.settings.guesses = tempNumberOfGuesses;
-        App.settings.duplicates = $('#preferences #checkmark').is(':visible');
-        SetCookie('settings', [App.settings.colors, App.settings.holes, App.settings.guesses, App.settings.duplicates].join(), 90);
-        HideDialog();
-        ResetBoard();
-        StartGame();
-    });
-    $('.dialog .button:contains("Resume"), .dialog .button:contains("Continue")').click(function() {
-        App.timer.resume();
-        HideDialog();
-    });
-    $('.dialog .button:contains("Okay")').click(function() {
-        App.timer.resume();
-        HideDialog();
-    });
-    $('.dialog .button:contains("No Thanks")').click(function() {
-        HideDialog();
-    });
-    $('.dialog .button:contains("Sure")').click(function() {
-        HideDialog();
-        ResetBoard();
-        StartGame();
-    });
-}
-function BuildMenuButtons()
-{
-    $('#pref-button').click(function() {
-        console.log("The preferences button was clicked.");
-        tempNumberOfColors = App.settings.colors;
-        tempNumberOfHoles = App.settings.holes;
-        tempNumberOfGuesses = App.settings.guesses;
-        ShowDialog($('.dialog#preferences'), App.timer.pause);
-    });
-    $('#pause-button').click(function() {
-        ShowDialog($('.dialog#paused'), App.timer.pause);
-    });
-    $('#share-button').click(function() {
-        StorePattern();
-    });
-}
 /***** Game Start Helpers *****/
 function ChooseNewPattern(game)
 {
@@ -657,6 +553,97 @@ function StorePattern()
         ShowDialog($('.dialog#error'), App.timer.pause);
     });
 }
+/***** Event Handlers *****/
+
+$('#show_more_stats').on('click', function () {
+    if ($('#more_stats').is(':visible')) {
+        $('#more_stats').slideUp(300);
+        $(this).text('See More Statistics and Averages');
+    }
+    else {
+        $('#more_stats').slideDown(300);
+        $(this).text('Hide Statistics and Averages');
+    }
+});
+
+$('.dialog .button:contains("I\'m Done")').on('click', function () {
+    console.log("I\'m Done was clicked.");
+    HideDialog();
+});
+$('.dialog .button:contains("Play Again")').on('click', function () {
+    console.log("Play Again was clicked.");
+    HideDialog();
+    ResetGame();
+    StartGame();
+});
+$('#preferences .button:contains("Cancel")').on('click', function () {
+    console.log("Cancel was clicked.");
+    App.timer.resume();
+    HideDialog();
+});
+$('#preferences  .button:contains("Save")').on('click', function () {
+    console.log("Save was clicked.");
+    App.settings.colors = tempNumberOfColors;
+    App.settings.holes = tempNumberOfHoles;
+    App.settings.guesses = tempNumberOfGuesses;
+    App.settings.duplicates = $('#preferences #checkmark').is(':visible');
+    SetCookie('settings', [App.settings.colors, App.settings.holes, App.settings.guesses, App.settings.duplicates].join(), 90);
+    HideDialog();
+    ResetBoard();
+    StartGame();
+});
+$('.dialog .button:contains("Resume"), .dialog .button:contains("Continue")').on('click', function () {
+    App.timer.resume();
+    HideDialog();
+});
+$('.dialog .button:contains("Okay")').on('click', function () {
+    App.timer.resume();
+    HideDialog();
+});
+$('.dialog .button:contains("No Thanks")').on('click', function () {
+    HideDialog();
+});
+$('.dialog .button:contains("Sure")').on('click', function() {
+    HideDialog();
+    ResetBoard();
+    StartGame();
+});
+
+$('#preferences li').on('click', function () {
+    var category;
+    $(this).closest('ul').children('.current').removeClass('current');
+    $(this).addClass('current');
+    
+    category = $(this).closest('ul').attr('id');
+
+    if (category.indexOf('colors') !== -1) {
+        tempNumberOfColors = parseInt($(this).text(), 10);
+    }
+    else if (category.indexOf('length') !== -1) {
+        tempNumberOfHoles = parseInt($(this).text(), 10);
+    }
+    else if (category.indexOf('guesses') !== -1) {
+        tempNumberOfGuesses = parseInt($(this).text(), 10);
+    }
+});
+$('#preferences .checkbox').on('click', function () {
+    $(this).find('#checkmark').toggle();
+});
+
+$('#pref-button').on('click', function () {
+    console.log("The preferences button was clicked.");
+    tempNumberOfColors = App.settings.colors;
+    tempNumberOfHoles = App.settings.holes;
+    tempNumberOfGuesses = App.settings.guesses;
+    ShowDialog($('.dialog#preferences'), App.timer.pause);
+});
+$('#pause-button').on('click', function () {
+    ShowDialog($('.dialog#paused'), App.timer.pause);
+});
+$('#share-button').on('click', function () {
+    StorePattern();
+});
+
 /***** Cookie Helpers *****/
 function SetCookie(key,value,days)
 {
