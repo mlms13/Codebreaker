@@ -489,7 +489,7 @@ function EvaluateGuess()
 function EndRound()
 {
     $('#game_board .ui-draggable').draggable('option', 'disabled', true);
-    $('.holder').droppable('option', 'disabled', true);
+    $('.holder.ui-droppable').droppable('option', 'disabled', true);
     $('.active').removeClass('active');
     $('#game_board .ui-draggable').removeClass('ui-draggable');
     $('.ui-droppable').removeClass('ui-droppable');
