@@ -235,7 +235,7 @@ function ChooseNewPattern(game)
     }
     else {
         // select only the colors we need
-        App.settings.allColors.slice(0, App.settings.colors)
+        tempColors = App.settings.allColors.slice(0, App.settings.colors)
 
         // shuffle array by stepping through each item and swapping it with a random position
         for (i = 0; i < tempColors.length; i++) {
@@ -246,7 +246,7 @@ function ChooseNewPattern(game)
         }
 
         // Set the game solution to the shuffled array
-        App.game.solution = tempColors.slice(0);
+        App.game.solution = tempColors.slice(0, App.settings.holes);
     }
 }
 function StartNewRound()
