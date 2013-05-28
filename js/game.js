@@ -129,7 +129,6 @@ function ResetGame()
 /****** Build Game Helpers *****/
 function InitializeVariables()
 {
-    colors = App.settings.allColors.slice(0, App.settings.colors);
     App.game.solution = [];
     App.game.guess = [];
     App.game.round = 0;
@@ -222,10 +221,7 @@ function BuildPreferences()
 /***** Game Start Helpers *****/
 function ChooseNewPattern(game)
 {
-    var i = 0,
-        rand = 0,
-        tempColors = App.settings.allColors.slice(0),
-        tempHolder;
+    var i, rand, tempColors, tempHolder;
     
     if (game != null) {
         console.log(game);
@@ -234,19 +230,23 @@ function ChooseNewPattern(game)
     else if (App.settings.duplicates) {
         for (i = 0; i < App.settings.holes; i++) {
             rand = Math.floor(Math.random() * App.settings.colors);
-            App.game.solution[i] = colors[rand];
+            App.game.solution[i] = App.settings.allColors[rand];
         }
     }
     else {
+        // select only the colors we need
+        App.settings.allColors.slice(0, App.settings.colors)
+
+        // shuffle array by stepping through each item and swapping it with a random position
         for (i = 0; i < tempColors.length; i++) {
             rand = Math.floor(Math.random() * App.settings.colors);
             tempHolder = tempColors[i];
             tempColors[i] = tempColors[rand];
             tempColors[rand] = tempHolder;
         }
-        for (i = 0; i < App.settings.holes; i++) {
-            App.game.solution[i] = tempColors[i];
-        }
+
+        // Set the game solution to the shuffled array
+        App.game.solution = tempColors.slice(0);
     }
 }
 function StartNewRound()
