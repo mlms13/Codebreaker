@@ -1,7 +1,8 @@
 var App = App || {};
 
 App.ui = {
-    board: $('#game_board')
+    board: $('#game_board'),
+    chooser: $('#color_chooser')
 };
 
 App.settings = {
@@ -113,8 +114,8 @@ function ResetBoard()
 {
     self.document.location.hash = '';
     App.ui.board.removeClass('paused').empty();
-    $('#color_chooser').empty();
-    $('#color_chooser .marble').unbind('click').unbind('dblclick');
+    App.ui.chooser.empty()
+        .find('.marble').unbind('click').unbind('dblclick');
     BuildGame();
 }
 function ResetGame()
@@ -177,13 +178,13 @@ function BuildColorPicker()
         clicksSinceAddingColor = 0,
         dragDistance = 0;
     for (i = 0; i < App.settings.colors; i++) {
-        $('#color_chooser').append('<div class="holder"><div class="marble ' + App.settings.allColors[i] + '"></div></div>');
-        $('#color_chooser .holder').each(function() {
+        App.ui.chooser.append('<div class="holder"><div class="marble ' + App.settings.allColors[i] + '"></div></div>');
+        App.ui.chooser.find('.holder').each(function() {
             var n = $(this).index(),
                 left = (48 * n) + 16;
             $(this).css('left', left + "px");
         });
-        $('#color_chooser .marble').draggable({
+        App.ui.chooser.find('.marble').draggable({
             helper: 'clone',
             drag: function() {
                 dragDistance++;
@@ -196,7 +197,7 @@ function BuildColorPicker()
             }
         });
     }
-    $('#color_chooser .marble').click(function() {
+    App.ui.chooser.find('.marble').click(function() {
         console.log("You clicked on a color.");
         selectedIndex = App.ui.board.find('.selected').index();
         clicksSinceAddingColor++;
@@ -444,7 +445,7 @@ function HandleLoseGame()
 function ShowDialog(dialog, callback)
 {
     App.ui.board.fadeTo(250, .4);
-    $('#color_chooser').fadeTo(250, .4);
+    App.ui.chooser.fadeTo(250, .4);
     $('#overlay').fadeIn(250, function() {
         dialog.fadeIn(250);
         if (typeof callback == "function") {
@@ -457,7 +458,7 @@ function HideDialog(callback)
 {
     $('.dialog:visible').fadeOut(250, function() {
         $('#overlay').fadeOut(250);
-        $('#color_chooser').fadeTo(250, 1);
+        App.ui.chooser.fadeTo(250, 1);
         App.ui.board.fadeTo(250, 1, function() {
             if (typeof callback == "function") {
                 console.log("Trying to call callback.");
