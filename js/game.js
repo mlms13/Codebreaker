@@ -1,5 +1,10 @@
 var App = App || {};
 
+App.ui = {
+    board: $('#game_board'),
+    chooser: $('#color_chooser')
+};
+
 App.settings = {
     'allColors':    ["red", "orange", "yellow", "green", "blue", "purple", "pink", "brown"],
     'colors':       6,
@@ -46,7 +51,7 @@ App.timer = (function () {
     obj.pause = function () {
         if (startTime > 0 && !paused) {
             pauseStart = Date.now();
-            $('#game_board').addClass('paused');
+            App.ui.board.addClass('paused');
             paused = true;
             console.log('The timer is paused.');
         } else {
@@ -57,7 +62,7 @@ App.timer = (function () {
     obj.resume = function () {
         if (paused) {
             pauseLength += Date.now() - pauseStart;
-            $('#game_board').removeClass('paused');
+            App.ui.board.removeClass('paused');
             paused = false;
             console.log("Resuming. Paused for " + pauseLength + "ms.");
         } else {
@@ -108,10 +113,9 @@ function StartGame(game)
 function ResetBoard()
 {
     self.document.location.hash = '';
-    $('#game_board').removeClass('paused');
-    $('#game_board').empty();
-    $('#color_chooser').empty();
-    $('#color_chooser .marble').unbind('click').unbind('dblclick');
+    App.ui.board.removeClass('paused').empty();
+    App.ui.chooser.empty()
+        .find('.marble').unbind('click').unbind('dblclick');
     BuildGame();
 }
 function ResetGame()
@@ -120,7 +124,7 @@ function ResetGame()
     InitializeVariables();
     $('.display_correct .black').removeClass('black');
     $('.display_correct .white').removeClass('white');
-    $('#game_board .holder').children('.marble').remove();
+    App.ui.board.find('.marble').remove();
 }
 /**************************************
  *          Utility Functions         *
@@ -138,12 +142,12 @@ function BuildBoard()
     var i = 0;
     SetMinimumWidth();
     for (i = 0; i < App.settings.guesses; i++) {
-        $('#game_board').append('<div class="row"></div>');
+        App.ui.board.append('<div class="row"></div>');
     }
     for (i = 0; i < App.settings.holes; i++) {
-        $('#game_board .row').append('<div class="holder"></div>');
+        App.ui.board.find('.row').append('<div class="holder"></div>');
     }
-    $('#game_board .row').append('<div class="display_correct contains' + App.settings.holes + '"></div>');
+    App.ui.board.find('.row').append('<div class="display_correct contains' + App.settings.holes + '"></div>');
     for (i = 0; i < App.settings.holes; i++) {
         $('.display_correct').append('<div class="correct_marker"></div>');
     }
@@ -151,8 +155,8 @@ function BuildBoard()
         $('.display_correct div:nth-child(3)').addClass('center_marker');
     }
     
-    $('#game_board').on('click', '.active .holder', function () {
-        $('#game_board .selected').removeClass('selected');
+    App.ui.board.on('click', '.active .holder', function () {
+        App.ui.board.find('.selected').removeClass('selected');
         $(this).addClass('selected');
     });
 }
@@ -174,13 +178,13 @@ function BuildColorPicker()
         clicksSinceAddingColor = 0,
         dragDistance = 0;
     for (i = 0; i < App.settings.colors; i++) {
-        $('#color_chooser').append('<div class="holder"><div class="marble ' + App.settings.allColors[i] + '"></div></div>');
-        $('#color_chooser .holder').each(function() {
+        App.ui.chooser.append('<div class="holder"><div class="marble ' + App.settings.allColors[i] + '"></div></div>');
+        App.ui.chooser.find('.holder').each(function() {
             var n = $(this).index(),
                 left = (48 * n) + 16;
             $(this).css('left', left + "px");
         });
-        $('#color_chooser .marble').draggable({
+        App.ui.chooser.find('.marble').draggable({
             helper: 'clone',
             drag: function() {
                 dragDistance++;
@@ -193,9 +197,9 @@ function BuildColorPicker()
             }
         });
     }
-    $('#color_chooser .marble').click(function() {
+    App.ui.chooser.find('.marble').click(function() {
         console.log("You clicked on a color.");
-        selectedIndex = $('#game_board .selected').index();
+        selectedIndex = App.ui.board.find('.selected').index();
         clicksSinceAddingColor++;
         if (selectedIndex !== -1) {
             HandleChooseColor(selectedIndex, App.settings.allColors[$(this).parent('.holder').index()]);
@@ -258,7 +262,7 @@ function StartNewRound()
         App.game.guess[i] = null;
     }
     row = App.settings.guesses - (App.game.round - 1);
-    $('#game_board .row:nth-child(' + row + ')').addClass('active');
+    App.ui.board.find('.row:nth-child(' + row + ')').addClass('active');
     
     $('.active .holder').droppable({
         disabled: false,
@@ -298,8 +302,8 @@ function GetDroppedColor()
 function HandleChooseColor(selectedSlot, selectedColor)
 {
     if (selectedSlot !== -1) {
-        var currentHolder = $('#game_board .active .holder').eq(selectedSlot);
-        $('#game_board .selected').removeClass('selected');
+        var currentHolder = App.ui.board.find('.active .holder').eq(selectedSlot);
+        App.ui.board.find('.selected').removeClass('selected');
         currentHolder.children('.marble').remove();
         currentHolder.append('<div class="marble"></div>');
         currentHolder.children('.marble').addClass(selectedColor);
@@ -384,10 +388,10 @@ function EvaluateGuess()
 }
 function EndRound()
 {
-    $('#game_board .ui-draggable').draggable('option', 'disabled', true);
+    App.ui.board.find('.ui-draggable').draggable('option', 'disabled', true);
     $('.holder.ui-droppable').droppable('option', 'disabled', true);
     $('.active').removeClass('active');
-    $('#game_board .ui-draggable').removeClass('ui-draggable');
+    App.ui.board.find('.ui-draggable').removeClass('ui-draggable');
     $('.ui-droppable').removeClass('ui-droppable');
 }
 function HandleWinGame()
@@ -440,8 +444,8 @@ function HandleLoseGame()
 /***** Overlay Helpers *****/
 function ShowDialog(dialog, callback)
 {
-    $('#game_board').fadeTo(250, .4);
-    $('#color_chooser').fadeTo(250, .4);
+    App.ui.board.fadeTo(250, .4);
+    App.ui.chooser.fadeTo(250, .4);
     $('#overlay').fadeIn(250, function() {
         dialog.fadeIn(250);
         if (typeof callback == "function") {
@@ -454,8 +458,8 @@ function HideDialog(callback)
 {
     $('.dialog:visible').fadeOut(250, function() {
         $('#overlay').fadeOut(250);
-        $('#color_chooser').fadeTo(250, 1);
-        $('#game_board').fadeTo(250, 1, function() {
+        App.ui.chooser.fadeTo(250, 1);
+        App.ui.board.fadeTo(250, 1, function() {
             if (typeof callback == "function") {
                 console.log("Trying to call callback.");
                 callback();
