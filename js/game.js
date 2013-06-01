@@ -31,11 +31,15 @@ App.settings = {
     }
 };
 
-App.game = {
-    'solution':       [], // the sequence that the player is trying to guess
-    'guess':          [], // the player's guess
-    'round':          0
-};
+App.game = (function () {
+    var obj = {};
+
+    obj.solution = [];
+    obj.guess = [];
+    obj.round = 0;
+
+    return obj;
+});
 
 App.timer = (function () {
     var obj = {},
