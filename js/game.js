@@ -1,9 +1,13 @@
 var App = App || {};
 
-App.ui = {
-    board: $('#game_board'),
-    chooser: $('#color_chooser')
-};
+App.ui = (function () {
+    var obj = {};
+
+    obj.board = $('#game_board');
+    obj.chooser = $('#color_chooser');
+
+    return obj;
+}());
 
 App.settings = {
     'allColors':    ["red", "orange", "yellow", "green", "blue", "purple", "pink", "brown"],
