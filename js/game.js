@@ -38,8 +38,14 @@ App.game = (function () {
     obj.guess = [];
     obj.round = 0;
 
+    obj.resetVariables = function () {
+        obj.solution = [];
+        obj.guess = [];
+        obj.round = 0;
+    };
+
     return obj;
-});
+}());
 
 App.timer = (function () {
     var obj = {},
@@ -102,7 +108,7 @@ $(document).ready(function() {
 });
 function BuildGame()
 {
-    InitializeVariables();
+    App.game.resetVariables();
     BuildBoard();
     BuildColorPicker();
     BuildPreferences();
@@ -125,7 +131,7 @@ function ResetBoard()
 function ResetGame()
 {
     self.document.location.hash = '';
-    InitializeVariables();
+    App.game.resetVariables();
     $('.display_correct .black').removeClass('black');
     $('.display_correct .white').removeClass('white');
     App.ui.board.find('.marble').remove();
@@ -135,12 +141,6 @@ function ResetGame()
  **************************************/
 
 /****** Build Game Helpers *****/
-function InitializeVariables()
-{
-    App.game.solution = [];
-    App.game.guess = [];
-    App.game.round = 0;
-}
 function BuildBoard()
 {
     var i = 0;
