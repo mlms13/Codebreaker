@@ -153,6 +153,11 @@ App.game = (function () {
         obj.round = 0;
     };
 
+    obj.build = function () {
+        obj.resetVariables();
+        App.ui.build();
+    };
+
     return obj;
 }());
 
@@ -211,15 +216,10 @@ $(document).ready(function() {
     // If no game is defined, continue building a random game
     else {
         console.log('No game was defined; building a random one instead.');
-        BuildGame();
+        App.game.build();
         StartGame();
     }
 });
-function BuildGame()
-{
-    App.game.resetVariables();
-    App.ui.build();
-}
 function StartGame(game)
 {
     var d = new Date();
@@ -233,7 +233,7 @@ function ResetBoard()
     App.ui.board.removeClass('paused').empty();
     App.ui.chooser.empty()
         .find('.marble').unbind('click').unbind('dblclick');
-    BuildGame();
+    App.game.build();
 }
 function ResetGame()
 {
@@ -543,7 +543,7 @@ function RetrievePattern(urlHash)
             App.settings.holes = pattern.length;
             App.settings.guesses = parseInt(data.guesses);
             App.settings.duplicates = parseInt(data.duplicates) === 1;
-            BuildGame();
+            App.game.build();
             StartGame(pattern);
             console.log('A specific game was requested: ' + pattern);
         }
