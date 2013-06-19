@@ -234,6 +234,7 @@ function ResetBoard()
     App.ui.chooser.empty()
         .find('.marble').unbind('click').unbind('dblclick');
     App.game.build();
+    StartGame();
 }
 function ResetGame()
 {
@@ -619,7 +620,6 @@ $('#preferences  .button:contains("Save")').on('click', function () {
     SetCookie('settings', [App.settings.colors, App.settings.holes, App.settings.guesses, App.settings.duplicates].join(), 90);
     HideDialog();
     ResetBoard();
-    StartGame();
 });
 $('.dialog .button:contains("Resume"), .dialog .button:contains("Continue")').on('click', function () {
     App.timer.resume();
@@ -635,7 +635,6 @@ $('.dialog .button:contains("No Thanks")').on('click', function () {
 $('.dialog .button:contains("Sure")').on('click', function() {
     HideDialog();
     ResetBoard();
-    StartGame();
 });
 
 $('#preferences li').on('click', function () {
