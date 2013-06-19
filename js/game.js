@@ -1,10 +1,56 @@
 var App = App || {};
 
 App.ui = (function () {
-    var obj = {};
+    var obj = {},
+        setMinWidth;
+
+    setMinWidth = function () {
+        var minWidth = Math.max((App.settings.colors + 1) * 48, (App.settings.holes + 1) * 52, 350),
+            dialogMinWidth = Math.max(App.settings.holes * 50, 268);
+
+        if (App.settings.holes === 6) {
+            // add some extra space to accomodate the larger "correct marker"
+            minWidth += 4;
+        }
+
+        $('h1').css('minWidth', minWidth + 'px');
+        $('#codebreaker_game').css('minWidth', minWidth + 'px');
+        $('.dialog').css('minWidth', dialogMinWidth + 'px');
+    };
 
     obj.board = $('#game_board');
     obj.chooser = $('#color_chooser');
+
+    obj.build = function () {
+        var i = 0;
+
+        setMinWidth();
+
+        // build a row for each potential round
+        for (i = 0; i < App.settings.guesses; i++) {
+            App.ui.board.append('<div class="row"></div>');
+        }
+
+        // in each row, build enough holes to match the length of the pattern
+        for (i = 0; i < App.settings.holes; i++) {
+            App.ui.board.find('.row').append('<div class="holder"></div>');
+        }
+
+        // add the holder for the "correct marker"
+        App.ui.board.find('.row').append('<div class="display_correct contains' + App.settings.holes + '"></div>');
+        for (i = 0; i < App.settings.holes; i++) {
+            $('.display_correct').append('<div class="correct_marker"></div>');
+        }
+        if (App.settings.holes === 5) {
+            $('.display_correct div:nth-child(3)').addClass('center_marker');
+        }
+
+        // handle click events on `.holder` elements in the active row
+        App.ui.board.on('click', '.active .holder', function () {
+            App.ui.board.find('.selected').removeClass('selected');
+            $(this).addClass('selected');
+        });
+    };
 
     return obj;
 }());
@@ -113,7 +159,7 @@ $(document).ready(function() {
 function BuildGame()
 {
     App.game.resetVariables();
-    BuildBoard();
+    App.ui.build();
     BuildColorPicker();
     BuildPreferences();
 }
@@ -145,40 +191,6 @@ function ResetGame()
  **************************************/
 
 /****** Build Game Helpers *****/
-function BuildBoard()
-{
-    var i = 0;
-    SetMinimumWidth();
-    for (i = 0; i < App.settings.guesses; i++) {
-        App.ui.board.append('<div class="row"></div>');
-    }
-    for (i = 0; i < App.settings.holes; i++) {
-        App.ui.board.find('.row').append('<div class="holder"></div>');
-    }
-    App.ui.board.find('.row').append('<div class="display_correct contains' + App.settings.holes + '"></div>');
-    for (i = 0; i < App.settings.holes; i++) {
-        $('.display_correct').append('<div class="correct_marker"></div>');
-    }
-    if (App.settings.holes === 5) {
-        $('.display_correct div:nth-child(3)').addClass('center_marker');
-    }
-    
-    App.ui.board.on('click', '.active .holder', function () {
-        App.ui.board.find('.selected').removeClass('selected');
-        $(this).addClass('selected');
-    });
-}
-function SetMinimumWidth()
-{
-    var minimumWidth = Math.max((App.settings.colors + 1) * 48, (App.settings.holes + 1) * 52, 350),
-        dialogMinimumWidth = Math.max(App.settings.holes * 50, 268);
-    if (App.settings.holes === 6) {
-        minimumWidth += 4;
-    }
-    $('h1').css('minWidth', minimumWidth + 'px');
-    $('#codebreaker_game').css('minWidth', minimumWidth + 'px');
-    $('.dialog').css('minWidth', dialogMinimumWidth + 'px');
-}
 function BuildColorPicker()
 {
     var i = 0,
