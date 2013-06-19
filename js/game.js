@@ -141,15 +141,44 @@ App.settings = {
 };
 
 App.game = (function () {
-    var obj = {};
+    var obj = {},
+        getRandomPattern;
 
     obj.solution = [];
     obj.guess = [];
     obj.round = 0;
 
+    getRandomPattern = function () {
+        var i, r, tempColors, tempHolder, solution = [];
+
+        if (App.settings.duplicates) {
+            for (i = 0; i < App.settings.holes; i++) {
+                r = Math.floor(Math.random() * App.settings.colors);
+                solution[i] = App.settings.allColors[r];
+            }
+        }
+        else {
+            // select only the colors we need
+            tempColors = App.settings.allColors.slice(0, App.settings.colors)
+
+            // shuffle array by stepping through each item and swapping it with a random position
+            for (i = 0; i < tempColors.length; i++) {
+                r = Math.floor(Math.random() * App.settings.colors);
+                tempHolder = tempColors[i];
+                tempColors[i] = tempColors[r];
+                tempColors[r] = tempHolder;
+            }
+
+            // Set the game solution to the shuffled array
+            solution = tempColors.slice(0, App.settings.holes);
+        }
+
+        return solution;
+    };
+
     obj.build = function (pattern) {
         // reset game variables
-        obj.solution = [];
+        obj.solution = pattern || getRandomPattern();
         obj.guess = [];
         obj.round = 0;
 
@@ -157,7 +186,6 @@ App.game = (function () {
         App.ui.build();
 
         // start the game
-        ChooseNewPattern(pattern);
         StartNewRound();
         App.timer.start();
     };
@@ -237,36 +265,7 @@ function ResetBoard()
  **************************************/
 
 /***** Game Start Helpers *****/
-function ChooseNewPattern(game)
-{
-    var i, rand, tempColors, tempHolder;
-    
-    if (game != null) {
-        console.log(game);
-        App.game.solution = game;
-    }
-    else if (App.settings.duplicates) {
-        for (i = 0; i < App.settings.holes; i++) {
-            rand = Math.floor(Math.random() * App.settings.colors);
-            App.game.solution[i] = App.settings.allColors[rand];
-        }
-    }
-    else {
-        // select only the colors we need
-        tempColors = App.settings.allColors.slice(0, App.settings.colors)
 
-        // shuffle array by stepping through each item and swapping it with a random position
-        for (i = 0; i < tempColors.length; i++) {
-            rand = Math.floor(Math.random() * App.settings.colors);
-            tempHolder = tempColors[i];
-            tempColors[i] = tempColors[rand];
-            tempColors[rand] = tempHolder;
-        }
-
-        // Set the game solution to the shuffled array
-        App.game.solution = tempColors.slice(0, App.settings.holes);
-    }
-}
 function StartNewRound()
 {
     var i = 0,
