@@ -391,10 +391,9 @@ function EvaluateGuess()
 function EndRound()
 {
     App.ui.board.find('.ui-draggable').draggable('option', 'disabled', true);
-    $('.holder.ui-droppable').droppable('option', 'disabled', true);
+    App.ui.board.find('.ui-droppable').droppable('option', 'disabled', true);
+
     $('.active').removeClass('active');
-    App.ui.board.find('.ui-draggable').removeClass('ui-draggable');
-    $('.ui-droppable').removeClass('ui-droppable');
 }
 function HandleWinGame()
 {
