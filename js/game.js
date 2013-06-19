@@ -2,7 +2,11 @@ var App = App || {};
 
 App.ui = (function () {
     var obj = {},
-        setMinWidth;
+        setMinWidth,
+        buildColorPicker;
+
+    obj.board = $('#game_board');
+    obj.chooser = $('#color_chooser');
 
     setMinWidth = function () {
         var minWidth = Math.max((App.settings.colors + 1) * 48, (App.settings.holes + 1) * 52, 350),
@@ -18,13 +22,54 @@ App.ui = (function () {
         $('.dialog').css('minWidth', dialogMinWidth + 'px');
     };
 
-    obj.board = $('#game_board');
-    obj.chooser = $('#color_chooser');
+    buildColorPicker = function () {
+        var i = 0,
+            selectedIndex,
+            clicksSinceAddingColor = 0,
+            dragDistance = 0;
+
+        for (i = 0; i < App.settings.colors; i++) {
+            App.ui.chooser.append('<div class="holder"><div class="marble ' + App.settings.allColors[i] + '"></div></div>');
+            App.ui.chooser.find('.holder').each(function() {
+                var n = $(this).index(),
+                    left = (48 * n) + 16;
+                $(this).css('left', left + "px");
+            });
+
+            App.ui.chooser.find('.marble').draggable({
+                helper: 'clone',
+                drag: function() {
+                    dragDistance++;
+                },
+                stop: function() {
+                    if (dragDistance < 5) {
+                        $(this).click();
+                    }
+                    dragDistance = 0;
+                }
+            });
+        }
+        App.ui.chooser.find('.marble').click(function() {
+            console.log("You clicked on a color.");
+            selectedIndex = App.ui.board.find('.selected').index();
+            clicksSinceAddingColor++;
+            if (selectedIndex !== -1) {
+                HandleChooseColor(selectedIndex, App.settings.allColors[$(this).parent('.holder').index()]);
+                clicksSinceAddingColor = 0;
+            }
+        }).dblclick(function() {
+            console.log("You double-clicked on a color.");
+            if (clicksSinceAddingColor > 1) {
+                HandleChooseColor(GetFirstEmptySlot(), App.settings.allColors[$(this).parent('.holder').index()]);
+            }
+        });
+    }
 
     obj.build = function () {
         var i = 0;
 
         setMinWidth();
+        buildColorPicker();
 
         // build a row for each potential round
         for (i = 0; i < App.settings.guesses; i++) {
@@ -50,6 +95,8 @@ App.ui = (function () {
             App.ui.board.find('.selected').removeClass('selected');
             $(this).addClass('selected');
         });
+
+
     };
 
     return obj;
@@ -160,7 +207,6 @@ function BuildGame()
 {
     App.game.resetVariables();
     App.ui.build();
-    BuildColorPicker();
     BuildPreferences();
 }
 function StartGame(game)
@@ -191,47 +237,6 @@ function ResetGame()
  **************************************/
 
 /****** Build Game Helpers *****/
-function BuildColorPicker()
-{
-    var i = 0,
-        selectedIndex,
-        clicksSinceAddingColor = 0,
-        dragDistance = 0;
-    for (i = 0; i < App.settings.colors; i++) {
-        App.ui.chooser.append('<div class="holder"><div class="marble ' + App.settings.allColors[i] + '"></div></div>');
-        App.ui.chooser.find('.holder').each(function() {
-            var n = $(this).index(),
-                left = (48 * n) + 16;
-            $(this).css('left', left + "px");
-        });
-        App.ui.chooser.find('.marble').draggable({
-            helper: 'clone',
-            drag: function() {
-                dragDistance++;
-            },
-            stop: function() {
-                if (dragDistance < 5) {
-                    $(this).click();
-                }
-                dragDistance = 0;
-            }
-        });
-    }
-    App.ui.chooser.find('.marble').click(function() {
-        console.log("You clicked on a color.");
-        selectedIndex = App.ui.board.find('.selected').index();
-        clicksSinceAddingColor++;
-        if (selectedIndex !== -1) {
-            HandleChooseColor(selectedIndex, App.settings.allColors[$(this).parent('.holder').index()]);
-            clicksSinceAddingColor = 0;
-        }
-    }).dblclick(function() {
-        console.log("You double-clicked on a color.");
-        if (clicksSinceAddingColor > 1) {
-            HandleChooseColor(GetFirstEmptySlot(), App.settings.allColors[$(this).parent('.holder').index()]);
-        }
-    });
-}
 function BuildPreferences()
 {   
     $('#opt_colors li:contains(' + App.settings.colors + ')').addClass('current');
