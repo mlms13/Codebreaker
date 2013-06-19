@@ -31,7 +31,7 @@ App.ui = (function () {
             dragDistance = 0;
 
         for (i = 0; i < App.settings.colors; i++) {
-            App.ui.chooser.append('<div class="holder"><div class="marble ' + App.settings.allColors[i] + '"></div></div>');
+            App.ui.chooser.append('<div class="holder"><div class="marble ' + App.settings.allColors[i] + '" data-color="' + App.settings.allColors[i] + '"></div></div>');
             App.ui.chooser.find('.holder').each(function() {
                 var n = $(this).index(),
                     left = (48 * n) + 16;
@@ -275,7 +275,7 @@ function StartNewRound()
         disabled: false,
         hoverClass: 'drop_hover',
         drop: function(event, ui) {
-            HandleChooseColor ($(this).index(), GetDroppedColor());
+            HandleChooseColor($(this).index(), ui.draggable.data('color'));
         }
     });
 
@@ -293,21 +293,6 @@ function GetFirstEmptySlot()
     }
     return -1;
 }
-function GetDroppedColor()
-{
-    var i = 0,
-        selectedColor = $('.ui-draggable-dragging').attr('class');
-    selectedColor = selectedColor.replace("marble", "");
-    selectedColor = selectedColor.replace("ui-draggable", "");
-    selectedColor = selectedColor.replace("ui-draggable-dragging", "");
-    for (i = 0; i < App.settings.colors; i++) {
-        if (selectedColor.search(App.settings.allColors[i]) != -1) {
-            selectedColor = App.settings.allColors[i];
-            break;
-        }
-    }
-    return selectedColor;
-}
 function HandleChooseColor(selectedSlot, selectedColor)
 {
     if (selectedSlot !== -1) {
@@ -315,7 +300,7 @@ function HandleChooseColor(selectedSlot, selectedColor)
         App.ui.activeRow.find('.selected').removeClass('selected');
         currentHolder.children('.marble').remove();
         currentHolder.append('<div class="marble"></div>');
-        currentHolder.children('.marble').addClass(selectedColor);
+        currentHolder.children('.marble').addClass(selectedColor).attr('data-color', selectedColor)
         currentHolder.children('.marble').draggable({
             // cloned so it can be dragged outside of the game board
             helper: 'clone',
