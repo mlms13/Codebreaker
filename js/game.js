@@ -85,7 +85,7 @@ App.ui = (function () {
 
         // build a row for each potential round
         for (i = 0; i < App.settings.guesses; i++) {
-            App.ui.board.append('<div class="row"></div>');
+            App.ui.board.append('<div class="row" data-round="' + (App.settings.guesses - i) +'"></div>');
         }
 
         // in each row, build enough holes to match the length of the pattern
@@ -268,21 +268,18 @@ function ResetBoard()
 
 function StartNewRound()
 {
-    var row;
-
-    App.game.round++;
     App.game.guess = [];
+    App.game.round++;
 
-    row = App.settings.guesses - (App.game.round - 1);
-    App.ui.board.find('.row:nth-child(' + row + ')').addClass('active');
-    
-    $('.active .holder').droppable({
-        disabled: false,
-        hoverClass: 'drop_hover',
-        drop: function(event, ui) {
-            HandleChooseColor ($(this).index(), GetDroppedColor());
-        }
-    });
+    App.ui.board
+        .find('.row[data-round=' + App.game.round + ']').addClass('active')
+        .find('.holder').droppable({
+            disabled: false,
+            hoverClass: 'drop_hover',
+            drop: function(event, ui) {
+                HandleChooseColor ($(this).index(), GetDroppedColor());
+            }
+        });
 }
 /***** Gameplay Helpers *****/
 function GetFirstEmptySlot()
