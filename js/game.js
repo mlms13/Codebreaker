@@ -147,14 +147,13 @@ App.game = (function () {
     obj.guess = [];
     obj.round = 0;
 
-    obj.resetVariables = function () {
+    obj.build = function () {
+        // reset game variables
         obj.solution = [];
         obj.guess = [];
         obj.round = 0;
-    };
 
-    obj.build = function () {
-        obj.resetVariables();
+        // reset the dom
         App.ui.build();
     };
 
