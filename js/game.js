@@ -3,7 +3,8 @@ var App = App || {};
 App.ui = (function () {
     var obj = {},
         setMinWidth,
-        buildColorPicker;
+        buildColorPicker,
+        buildPreferences;
 
     obj.board = $('#game_board');
     obj.chooser = $('#color_chooser');
@@ -63,13 +64,24 @@ App.ui = (function () {
                 HandleChooseColor(GetFirstEmptySlot(), App.settings.allColors[$(this).parent('.holder').index()]);
             }
         });
-    }
+    };
+
+    buildPreferences = function () {
+        $('#opt_colors li:contains(' + App.settings.colors + ')').addClass('current');
+        $('#opt_length li:contains(' + App.settings.holes + ')').addClass('current');
+        $('#opt_guesses li:contains(' + App.settings.guesses + ')').addClass('current');
+
+        if (!App.settings.duplicates) {
+            $('#preferences #checkmark').hide();
+        }
+    };
 
     obj.build = function () {
         var i = 0;
 
         setMinWidth();
         buildColorPicker();
+        buildPreferences();
 
         // build a row for each potential round
         for (i = 0; i < App.settings.guesses; i++) {
@@ -207,7 +219,6 @@ function BuildGame()
 {
     App.game.resetVariables();
     App.ui.build();
-    BuildPreferences();
 }
 function StartGame(game)
 {
@@ -235,17 +246,6 @@ function ResetGame()
 /**************************************
  *          Utility Functions         *
  **************************************/
-
-/****** Build Game Helpers *****/
-function BuildPreferences()
-{   
-    $('#opt_colors li:contains(' + App.settings.colors + ')').addClass('current');
-    $('#opt_length li:contains(' + App.settings.holes + ')').addClass('current');
-    $('#opt_guesses li:contains(' + App.settings.guesses + ')').addClass('current');
-    if (!App.settings.duplicates) {
-        $('#preferences #checkmark').hide();
-    }
-}
 
 /***** Game Start Helpers *****/
 function ChooseNewPattern(game)
