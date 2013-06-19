@@ -268,12 +268,11 @@ function ResetBoard()
 
 function StartNewRound()
 {
-    var i = 0,
-        row;
+    var row;
+
     App.game.round++;
-    for (i = 0; i < App.settings.holes; i++) {
-        App.game.guess[i] = null;
-    }
+    App.game.guess = [];
+
     row = App.settings.guesses - (App.game.round - 1);
     App.ui.board.find('.row:nth-child(' + row + ')').addClass('active');
     
