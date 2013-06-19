@@ -8,6 +8,7 @@ App.ui = (function () {
 
     obj.board = $('#game_board');
     obj.chooser = $('#color_chooser');
+    obj.activeRow = null;
 
     setMinWidth = function () {
         var minWidth = Math.max((App.settings.colors + 1) * 48, (App.settings.holes + 1) * 52, 350),
@@ -101,14 +102,6 @@ App.ui = (function () {
         if (App.settings.holes === 5) {
             $('.display_correct div:nth-child(3)').addClass('center_marker');
         }
-
-        // handle click events on `.holder` elements in the active row
-        App.ui.board.on('click', '.active .holder', function () {
-            App.ui.board.find('.selected').removeClass('selected');
-            $(this).addClass('selected');
-        });
-
-
     };
 
     return obj;
@@ -271,15 +264,22 @@ function StartNewRound()
     App.game.guess = [];
     App.game.round++;
 
-    App.ui.board
-        .find('.row[data-round=' + App.game.round + ']').addClass('active')
-        .find('.holder').droppable({
-            disabled: false,
-            hoverClass: 'drop_hover',
-            drop: function(event, ui) {
-                HandleChooseColor ($(this).index(), GetDroppedColor());
-            }
-        });
+    // cache the active row
+    App.ui.activeRow = App.ui.board.find('.row[data-round=' + App.game.round + ']');
+
+    // handle click and drop events for holders in the active row
+    App.ui.activeRow.find('.holder').on('click', function () {
+        App.ui.activeRow.find('.selected').removeClass('selected');
+        $(this).addClass('selected');
+    }).droppable({
+        disabled: false,
+        hoverClass: 'drop_hover',
+        drop: function(event, ui) {
+            HandleChooseColor ($(this).index(), GetDroppedColor());
+        }
+    });
+
+    App.ui.activeRow.addClass('active')
 }
 /***** Gameplay Helpers *****/
 function GetFirstEmptySlot()
@@ -311,8 +311,8 @@ function GetDroppedColor()
 function HandleChooseColor(selectedSlot, selectedColor)
 {
     if (selectedSlot !== -1) {
-        var currentHolder = App.ui.board.find('.active .holder').eq(selectedSlot);
-        App.ui.board.find('.selected').removeClass('selected');
+        var currentHolder = App.ui.activeRow.find('.holder').eq(selectedSlot);
+        App.ui.activeRow.find('.selected').removeClass('selected');
         currentHolder.children('.marble').remove();
         currentHolder.append('<div class="marble"></div>');
         currentHolder.children('.marble').addClass(selectedColor);
@@ -370,10 +370,10 @@ function EvaluateGuess()
     }
     for (i = 0; i < correctPieces; i++) {
         j = i + 1;
-        $('.active .display_correct div:nth-child(' + j + ')').addClass('black');
+        App.ui.activeRow.find('.display_correct div:nth-child(' + j + ')').addClass('black');
     }
     for (i = 0; i < correctColors; i++) {
-        $('.active .display_correct div:nth-child(' + (correctPieces + i + 1) + ')').addClass('white');
+        App.ui.activeRow.find('.display_correct div:nth-child(' + (correctPieces + i + 1) + ')').addClass('white');
     }
     EndRound();
     if (correctPieces == App.settings.holes) {
@@ -390,10 +390,9 @@ function EvaluateGuess()
 }
 function EndRound()
 {
-    App.ui.board.find('.ui-draggable').draggable('option', 'disabled', true);
-    App.ui.board.find('.ui-droppable').droppable('option', 'disabled', true);
-
-    $('.active').removeClass('active');
+    App.ui.activeRow.find('.ui-draggable').draggable('option', 'disabled', true);
+    App.ui.activeRow.find('.ui-droppable').droppable('option', 'disabled', true);
+    App.ui.activeRow.removeClass('active');
 }
 function HandleWinGame()
 {
