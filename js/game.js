@@ -329,23 +329,10 @@ function HandleChooseColor(selectedSlot, selectedColor)
             }
         });
         App.game.guess[selectedSlot] = selectedColor;
-        CheckForCompleteGuess();
-    }
-}
-function CheckForCompleteGuess()
-{
-    var allColorsChosen = true,
-        i = 0;
-    for (i = 0; i < App.settings.holes; i++) {
-        if (App.game.guess[i] == null) {
-            allColorsChosen = false;
-            break;
-        }
-    }
-    if (allColorsChosen) {
         EvaluateGuess();
     }
 }
+
 function EvaluateGuess()
 {
     var correctPieces = 0,
@@ -354,6 +341,12 @@ function EvaluateGuess()
         guessPatternCopy = App.game.guess.slice(0),
         i = 0,
         j = 0;
+
+    // if the guess is incomplete, return
+    for (i = 0; i < App.settings.holes; i++) {
+        if (!App.game.guess[i]) { return; }
+    }
+
     // First, look only for exact matches
     for (i = 0; i < App.settings.holes; i++) {
         if (guessPatternCopy[i] == solutionCopy[i]) {
