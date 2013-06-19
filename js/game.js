@@ -236,14 +236,7 @@ function ResetBoard()
     App.game.build();
     StartGame();
 }
-function ResetGame()
-{
-    self.document.location.hash = '';
-    App.game.resetVariables();
-    $('.display_correct .black').removeClass('black');
-    $('.display_correct .white').removeClass('white');
-    App.ui.board.find('.marble').remove();
-}
+
 /**************************************
  *          Utility Functions         *
  **************************************/
@@ -603,8 +596,7 @@ $('.dialog .button:contains("I\'m Done")').on('click', function () {
 $('.dialog .button:contains("Play Again")').on('click', function () {
     console.log("Play Again was clicked.");
     HideDialog();
-    ResetGame();
-    StartGame();
+    ResetBoard();
 });
 $('#preferences .button:contains("Cancel")').on('click', function () {
     console.log("Cancel was clicked.");
