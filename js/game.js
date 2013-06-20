@@ -248,8 +248,7 @@ function ResetBoard()
 {
     self.document.location.hash = '';
     App.ui.board.removeClass('paused').empty();
-    App.ui.chooser.empty()
-        .find('.marble').unbind('click').unbind('dblclick');
+    App.ui.chooser.empty();
     App.game.build();
 }
 
