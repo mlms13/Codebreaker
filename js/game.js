@@ -249,7 +249,6 @@ function ResetBoard()
     self.document.location.hash = '';
     App.ui.board.removeClass('paused').empty();
     App.ui.chooser.empty();
-    App.game.build();
 }
 
 /**************************************
@@ -561,6 +560,7 @@ $('.dialog .button:contains("Play Again")').on('click', function () {
     console.log("Play Again was clicked.");
     HideDialog();
     ResetBoard();
+    App.game.build();
 });
 $('#preferences .button:contains("Cancel")').on('click', function () {
     console.log("Cancel was clicked.");
@@ -576,6 +576,7 @@ $('#preferences  .button:contains("Save")').on('click', function () {
     SetCookie('settings', [App.settings.colors, App.settings.holes, App.settings.guesses, App.settings.duplicates].join(), 90);
     HideDialog();
     ResetBoard();
+    App.game.build();
 });
 $('.dialog .button:contains("Resume"), .dialog .button:contains("Continue")').on('click', function () {
     App.timer.resume();
@@ -591,6 +592,7 @@ $('.dialog .button:contains("No Thanks")').on('click', function () {
 $('.dialog .button:contains("Sure")').on('click', function() {
     HideDialog();
     ResetBoard();
+    App.game.build();
 });
 
 $('#preferences li').on('click', function () {
